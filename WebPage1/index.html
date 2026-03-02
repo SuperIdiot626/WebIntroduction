@@ -54,6 +54,18 @@
                 @apply bg-white text-mit-blue border border-mit-blue;
             }
         }
+
+        @media (min-width: 1024px) {
+        .grid-cols-auto {
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        }
+        /* 关键：如果最后一行只有1个，让它宽度和其他列一致（不再单独占一行） */
+        .grid-cols-auto > :last-child:nth-child(4n+1) {
+            grid-column: span 2;
+            max-width: calc(50% - 4px); /* 减去一半的gap间距 */
+            margin: 0 auto; /* 居中显示 */
+        }
+}
     </style>
 </head>
 <body class="font-sans bg-white text-mit-dark" id="app">
@@ -184,6 +196,12 @@
                 </p>
             </div>
 
+            <!-- 团队负责人 -->
+            <h3 class="text-2xl font-semibold text-mit-dark mb-8 border-b border-gray-200 pb-2" data-lang="team.leader">团队领军人物</h3>
+            <div id="leaderContainer" class="w-full mx-auto mb-16">
+                <!-- 领军人物由 JS 动态渲染 -->
+            </div>
+
             <!-- 教师成员 -->
             <h3 class="text-2xl font-semibold text-mit-dark mb-8 border-b border-gray-200 pb-2" data-lang="team.faculty">Faculty & Researchers</h3>
             <div id="facultyContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
@@ -192,7 +210,7 @@
 
             <!-- 学生成员 -->
             <h3 class="text-2xl font-semibold text-mit-dark mb-8 border-b border-gray-200 pb-2" data-lang="team.students">Students & Researchers</h3>
-            <div id="studentContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div id="studentContainer" class="grid gap-8 max-w-7xl mx-auto" id="studentGrid">
                 <!-- 学生成员由JS动态生成 -->
             </div>
         </div>
@@ -271,6 +289,7 @@
                 team: {
                     title: "Our Team",
                     desc: "Our diverse team of researchers, engineers, designers, and students brings a wide range of expertise and perspectives to our work.",
+                    leader: "Team Leader",
                     faculty: "Faculty & Researchers",
                     students: "Students & Researchers"
                 },
@@ -316,6 +335,7 @@
                 team: {
                     title: "我们的团队",
                     desc: "我们多元化的研究团队由研究员、工程师、设计师和学生组成，为我们的工作带来了广泛的专业知识和视角。",
+                    leader: "团队领军人物",
                     faculty: "教师与研究员",
                     students: "学生与研究人员"
                 },
@@ -331,14 +351,44 @@
 
         // ======================== 2. 成员数据配置（重点：增删改都在这里操作） ========================
         const memberData = {
+            leader: [
+                {
+                    id: "leader1",
+                    name: { en: "Weiwei Zhang", zh: "张伟伟" },
+                    position: { en: "Professor & Group Lead", zh: "教授 & 研究组负责人" },
+                    department: { en: "MIT EECS", zh: "西北工业大学流体力学" },
+                    avatar: "images/leaders/ZhangWeiwei.png",
+                    about: {
+                        en: "Dr. Johnson is the founder and leader of CDFG...",
+                        zh: `西北工业大学博士，现任西北工业大学航空学院党委委员、教授，流体力学智能化国际联合研究所所长，中国空气动力学会副理事长，国家级领军人才。
+                            <br><br>
+                            主要从事智能空气动力学、气动弹性力学与非定常空气动力学研究，发表论文200余篇，Google学术H因子42，撰写《跨声速气动弹性力学》等专著4部。
+                            <br><br>
+                            主持国家重点研发计划、国家自然科学基金集成项目等国家级课题20余项，包括\"电功率兆瓦级新能源航空器关键技术\"等重点项目。获国防科技进步奖、航空学会青年科技奖、空气动力学会首届青年科技奖等荣誉。
+                            <br><br>
+                            担任《Journal of Aircraft》副主编、《空气动力学学报》副主编等学术职务。
+                            `
+                    },
+                    interests: {
+                        en: ["Computational Design", "AI + Fabrication"],
+                        zh: ["计算设计", "人工智能 + 制造"]
+                    },
+                    contact: {
+                        email: "sarah.johnson@mit.edu",
+                        website: "#",
+                        scholar: "#"
+                    }
+                }
+            ],
+
             // 教师成员
             faculty: [
                 {
                     id: "member1",
-                    name: { en: "Sarah Johnson", zh: "萨拉·约翰逊" },
+                    name: { en: "Shufang Song", zh: "宋述芳" },
                     position: { en: "Professor & Group Lead", zh: "教授 & 研究组负责人" },
                     department: { en: "Computational Design | MIT EECS", zh: "计算设计 | 麻省理工学院电子工程与计算机科学系" },
-                    avatar: "https://picsum.photos/seed/prof1/300/300",
+                    avatar: "images/faculties/SongShufang.png",
                     about: {
                         en: "Dr. Johnson is a Professor of Electrical Engineering and Computer Science at MIT. Her research focuses on developing computational tools for design and fabrication, with applications in architecture, product design, and sustainable manufacturing. She received her PhD from Stanford University and has published over 100 peer-reviewed papers in top journals and conferences.",
                         zh: "约翰逊博士是麻省理工学院电子工程与计算机科学系教授。她的研究重点是开发用于设计和制造的计算工具，应用于建筑、产品设计和可持续制造领域。她拥有斯坦福大学博士学位，并在顶级期刊和会议上发表了100多篇同行评审论文。"
@@ -360,10 +410,10 @@
                 },
                 {
                     id: "member2",
-                    name: { en: "Michael Chen", zh: "迈克尔·陈" },
+                    name: { en: "Xiaojing Wu", zh: "邬晓敬" },
                     position: { en: "Senior Research Scientist", zh: "高级研究科学家" },
                     department: { en: "Robotics & Fabrication | MIT CSAIL", zh: "机器人与制造 | 麻省理工学院计算机科学与人工智能实验室" },
-                    avatar: "https://picsum.photos/seed/prof2/300/300",
+                    avatar: "images/faculties/WuXiaojing.png",
                     about: {
                         en: "Dr. Chen is a Senior Research Scientist at the MIT Computer Science and Artificial Intelligence Laboratory (CSAIL). His work focuses on the development of robotic fabrication systems and human-robot collaboration in design and manufacturing. He has extensive experience in developing custom hardware and software solutions for digital fabrication processes.",
                         zh: "陈博士是麻省理工学院计算机科学与人工智能实验室（CSAIL）的高级研究科学家。他的工作重点是开发机器人制造系统以及设计和制造中的人机协作。他在为数字制造流程开发定制硬件和软件解决方案方面拥有丰富经验。"
@@ -384,10 +434,10 @@
                 },
                 {
                     id: "member3",
-                    name: { en: "Emily Rodriguez", zh: "艾米丽·罗德里格斯" },
+                    name: { en: "Zhen Lv", zh: "吕振" },
                     position: { en: "Research Scientist", zh: "研究科学家" },
                     department: { en: "AI & Design | MIT Media Lab", zh: "人工智能与设计 | 麻省理工学院媒体实验室" },
-                    avatar: "https://picsum.photos/seed/prof3/300/300",
+                    avatar: "images/faculties/LvZhen.png",
                     about: {
                         en: "Dr. Rodriguez is a Research Scientist at the MIT Media Lab, where she develops AI-powered design tools that augment human creativity. Her research combines machine learning, human-computer interaction, and design theory to create more intuitive and inclusive design systems.",
                         zh: "罗德里格斯博士是麻省理工学院媒体实验室的研究科学家，她开发增强人类创造力的人工智能设计工具。她的研究结合了机器学习、人机交互和设计理论，以创建更直观和包容的设计系统。"
@@ -409,6 +459,7 @@
                 }
                 // 新增教师：直接复制上面的对象，修改内容即可
             ],
+
             // 学生成员
             students: [
                 {
@@ -470,6 +521,26 @@
                 },
                 {
                     id: "student4",
+                    name: { en: "Yuki Tanaka", zh: "田中雪" },
+                    position: { en: "Postdoctoral Fellow", zh: "博士后研究员" },
+                    department: { en: "Human-Computer Interaction", zh: "人机交互" },
+                    avatar: "https://picsum.photos/seed/student4/300/300",
+                    about: {
+                        en: "Yuki's postdoctoral research explores cultural differences in design tool usage and develops inclusive design interfaces for global users. She received her PhD from the University of Tokyo.",
+                        zh: "田中的博士后研究探索设计工具使用的文化差异，并为全球用户开发包容性设计界面。她拥有东京大学博士学位。"
+                    },
+                    publications: [
+                        { title: { en: "Cross-Cultural Design Interfaces (2023)", zh: "跨文化设计界面 (2023)" }, link: "#" },
+                        { title: { en: "Inclusive Design Tools (2022)", zh: "包容性设计工具 (2022)" }, link: "#" }
+                    ],
+                    projects: [],
+                    contact: {
+                        github: "#",
+                        email: "#"
+                    }
+                },
+                {
+                    id: "student5",
                     name: { en: "Yuki Tanaka", zh: "田中雪" },
                     position: { en: "Postdoctoral Fellow", zh: "博士后研究员" },
                     department: { en: "Human-Computer Interaction", zh: "人机交互" },
@@ -566,26 +637,86 @@
             document.documentElement.lang = currentLang === 'zh' ? 'zh-CN' : 'en';
         }
 
+        function adjustStudentGrid() {
+            const grid = document.getElementById('studentContainer');
+            const cards = grid.querySelectorAll('.member-card-hover');
+            const cardCount = cards.length;
+            
+            // 根据屏幕宽度和卡片数量，动态设置每行显示数
+            const setGridCols = () => {
+                const width = window.innerWidth;
+                let cols = 1; // 默认手机端1列
+                
+                // 平板/小屏（>640px）
+                if (width >= 640) {
+                    // 5个卡片时显示3列，其他数量按2/3列自适应
+                    cols = cardCount === 5 ? 3 : (cardCount % 2 === 1 ? 3 : 2);
+                }
+                // 中屏/大屏（>768px）
+                if (width >= 768) {
+                    // 5/7/8/9人时显示3列，其他显示4列
+                    cols = [5,7,8,9].includes(cardCount) ? 3 : 4;
+                }
+                
+                // 应用布局
+                grid.className = `grid grid-cols-${cols} gap-8 max-w-7xl mx-auto`;
+            };
+            
+            // 初始化+窗口大小变化时重新计算
+            setGridCols();
+            window.addEventListener('resize', setGridCols);
+        }
+
         // 渲染成员卡片
         function renderMembers() {
-            const facultyContainer = document.getElementById('facultyContainer');
-            const studentContainer = document.getElementById('studentContainer');
-            
-            // 清空容器
-            facultyContainer.innerHTML = '';
-            studentContainer.innerHTML = '';
+            // 渲染领导成员
+            const leaderContainer = document.getElementById('leaderContainer');
+            leaderContainer.innerHTML = '';
+            memberData.leader.forEach(member => {
+                const card = createLeaderCard(member);
+                leaderContainer.appendChild(card);
+            });
             
             // 渲染教师成员
+            const facultyContainer = document.getElementById('facultyContainer');
+            facultyContainer.innerHTML = '';
             memberData.faculty.forEach(member => {
                 const card = createFacultyCard(member);
                 facultyContainer.appendChild(card);
             });
             
             // 渲染学生成员
+            const studentContainer = document.getElementById('studentContainer');
+            studentContainer.innerHTML = '';
             memberData.students.forEach(member => {
                 const card = createStudentCard(member);
                 studentContainer.appendChild(card);
             });
+            adjustStudentGrid();
+        }
+
+        // 创建领导成员卡片
+        function createLeaderCard(member) {
+            const card = document.createElement('div');
+            card.className = "bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm p-10 mx-4 md:mx-8 lg:mx-16 flex flex-col md:flex-row gap-10 items-center";
+
+            card.innerHTML = `
+                <img src="${member.avatar}" 
+                    alt="${member.name[currentLang]}"
+                    class="w-36 h-36 rounded-full object-cover border-4 border-mit-blue/20">
+                <div class="flex-1 text-center md:text-left">
+                    <h3 class="text-2xl font-bold text-mit-dark mb-1">${member.name[currentLang]}</h3>
+                    <p class="text-mit-blue font-medium text-lg mb-2">${member.position[currentLang]}</p>
+                    <p class="text-mit-gray text-sm mb-4">${member.department[currentLang]}</p>
+                    <p class="text-mit-gray leading-relaxed mb-4">${member.about[currentLang]}</p>
+                    <div class="flex gap-3 justify-center md:justify-start">
+                        <a href="mailto:${member.contact.email}" class="text-mit-blue"><i class="fas fa-envelope"></i></a>
+                        <a href="${member.contact.website}" class="text-mit-blue"><i class="fas fa-globe"></i></a>
+                        <a href="${member.contact.scholar}" class="text-mit-blue"><i class="fab fa-google-scholar"></i></a>
+                    </div>
+                </div>
+            `;
+            return card;
         }
 
         // 创建教师成员卡片
