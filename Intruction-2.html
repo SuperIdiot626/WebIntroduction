@@ -44,37 +44,55 @@
                 transform: translateY(-5px);
                 box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
             }
+            .lang-btn {
+                @apply px-3 py-1 rounded-sm text-sm transition-colors;
+            }
+            .lang-btn.active {
+                @apply bg-mit-blue text-white;
+            }
+            .lang-btn.inactive {
+                @apply bg-white text-mit-blue border border-mit-blue;
+            }
         }
     </style>
 </head>
-<body class="font-sans bg-white text-mit-dark">
+<body class="font-sans bg-white text-mit-dark" id="app">
     <!-- 导航栏 -->
     <nav class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
-                    <a href="#" class="text-mit-blue font-bold text-xl">CDFG Research Group</a>
+                    <a href="#" class="text-mit-blue font-bold text-xl" data-lang="nav.title">CDFG Research Group</a>
                 </div>
-                <div class="hidden md:flex space-x-6">
-                    <a href="#about" class="text-mit-gray hover:text-mit-blue transition-colors">About</a>
-                    <a href="#members" class="text-mit-gray hover:text-mit-blue transition-colors">Members</a>
-                    <a href="#research" class="text-mit-gray hover:text-mit-blue transition-colors">Research</a>
-                    <a href="#publications" class="text-mit-gray hover:text-mit-blue transition-colors">Publications</a>
-                </div>
-                <div class="md:hidden">
-                    <button id="mobileMenuBtn" class="text-mit-gray hover:text-mit-blue">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
+                <div class="flex items-center gap-6">
+                    <!-- 语言切换按钮 -->
+                    <div class="flex gap-2">
+                        <button id="langZh" class="lang-btn active" data-lang="lang.zh">中文</button>
+                        <button id="langEn" class="lang-btn inactive" data-lang="lang.en">English</button>
+                    </div>
+                    
+                    <!-- 导航菜单 -->
+                    <div class="hidden md:flex space-x-6">
+                        <a href="#about" class="text-mit-gray hover:text-mit-blue transition-colors" data-lang="nav.about">About</a>
+                        <a href="#members" class="text-mit-gray hover:text-mit-blue transition-colors" data-lang="nav.members">Members</a>
+                        <a href="#research" class="text-mit-gray hover:text-mit-blue transition-colors" data-lang="nav.research">Research</a>
+                        <a href="#publications" class="text-mit-gray hover:text-mit-blue transition-colors" data-lang="nav.publications">Publications</a>
+                    </div>
+                    <div class="md:hidden">
+                        <button id="mobileMenuBtn" class="text-mit-gray hover:text-mit-blue">
+                            <i class="fas fa-bars text-xl"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
         <!-- 移动端菜单 -->
         <div id="mobileMenu" class="hidden md:hidden bg-white shadow-md pb-4">
             <div class="container mx-auto px-4 space-y-3 pt-2">
-                <a href="#about" class="block text-mit-gray hover:text-mit-blue py-2">About</a>
-                <a href="#members" class="block text-mit-gray hover:text-mit-blue py-2">Members</a>
-                <a href="#research" class="block text-mit-gray hover:text-mit-blue py-2">Research</a>
-                <a href="#publications" class="block text-mit-gray hover:text-mit-blue py-2">Publications</a>
+                <a href="#about" class="block text-mit-gray hover:text-mit-blue py-2" data-lang="nav.about">About</a>
+                <a href="#members" class="block text-mit-gray hover:text-mit-blue py-2" data-lang="nav.members">Members</a>
+                <a href="#research" class="block text-mit-gray hover:text-mit-blue py-2" data-lang="nav.research">Research</a>
+                <a href="#publications" class="block text-mit-gray hover:text-mit-blue py-2" data-lang="nav.publications">Publications</a>
             </div>
         </div>
     </nav>
@@ -92,15 +110,15 @@
         <!-- 文字内容 -->
         <div class="relative container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
             <div class="max-w-2xl text-white">
-                <h1 class="text-[clamp(2.5rem,6vw,4rem)] font-bold mb-6 leading-tight">
+                <h1 class="text-[clamp(2.5rem,6vw,4rem)] font-bold mb-6 leading-tight" data-lang="banner.title">
                     Computational Design & Fabrication Group
                 </h1>
-                <p class="text-[clamp(1rem,2vw,1.25rem)] mb-8 leading-relaxed">
+                <p class="text-[clamp(1rem,2vw,1.25rem)] mb-8 leading-relaxed" data-lang="banner.desc">
                     We advance the state of the art in computational design, digital fabrication, and 
                     human-computer interaction, with a focus on creating tools that empower designers, 
                     engineers, and makers to create better, more sustainable products and environments.
                 </p>
-                <a href="#members" class="inline-block bg-white text-mit-blue font-medium px-6 py-3 rounded-sm hover:bg-mit-light transition-colors">
+                <a href="#members" class="inline-block bg-white text-mit-blue font-medium px-6 py-3 rounded-sm hover:bg-mit-light transition-colors" data-lang="banner.btn">
                     Meet Our Team <i class="fas fa-arrow-right ml-2"></i>
                 </a>
             </div>
@@ -111,41 +129,41 @@
     <section class="py-16 bg-mit-light">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-4xl mx-auto">
-                <h2 class="text-[clamp(1.75rem,4vw,2.5rem)] font-bold text-mit-dark mb-8">Our Mission</h2>
+                <h2 class="text-[clamp(1.75rem,4vw,2.5rem)] font-bold text-mit-dark mb-8" data-lang="mission.title">Our Mission</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                        <p class="text-mit-gray text-lg leading-relaxed mb-6">
+                        <p class="text-mit-gray text-lg leading-relaxed mb-6" data-lang="mission.desc1">
                             The CDFG is a multidisciplinary research group at MIT dedicated to exploring the intersection of 
                             computer science, design, and manufacturing. Our work spans from fundamental algorithms to real-world 
                             applications, with the goal of making digital design and fabrication more accessible, efficient, and creative.
                         </p>
-                        <p class="text-mit-gray text-lg leading-relaxed">
+                        <p class="text-mit-gray text-lg leading-relaxed" data-lang="mission.desc2">
                             We collaborate with industry partners, academic institutions, and community organizations to 
                             translate our research into practical solutions that address pressing societal challenges.
                         </p>
                     </div>
                     <div class="bg-white p-6 rounded-sm shadow-md">
-                        <h3 class="text-xl font-semibold text-mit-blue mb-4">Research Focus Areas</h3>
+                        <h3 class="text-xl font-semibold text-mit-blue mb-4" data-lang="research.focus">Research Focus Areas</h3>
                         <ul class="space-y-3 text-mit-gray">
                             <li class="flex items-start gap-3">
                                 <i class="fas fa-cube text-mit-blue mt-1"></i>
-                                <span>Computational Design & Optimization</span>
+                                <span data-lang="research.area1">Computational Design & Optimization</span>
                             </li>
                             <li class="flex items-start gap-3">
                                 <i class="fas fa-robot text-mit-blue mt-1"></i>
-                                <span>Digital Fabrication & Robotics</span>
+                                <span data-lang="research.area2">Digital Fabrication & Robotics</span>
                             </li>
                             <li class="flex items-start gap-3">
                                 <i class="fas fa-leaf text-mit-blue mt-1"></i>
-                                <span>Sustainable Design & Manufacturing</span>
+                                <span data-lang="research.area3">Sustainable Design & Manufacturing</span>
                             </li>
                             <li class="flex items-start gap-3">
                                 <i class="fas fa-users text-mit-blue mt-1"></i>
-                                <span>Human-Computer Interaction</span>
+                                <span data-lang="research.area4">Human-Computer Interaction</span>
                             </li>
                             <li class="flex items-start gap-3">
                                 <i class="fas fa-brain text-mit-blue mt-1"></i>
-                                <span>AI-Assisted Design Tools</span>
+                                <span data-lang="research.area5">AI-Assisted Design Tools</span>
                             </li>
                         </ul>
                     </div>
@@ -158,396 +176,24 @@
     <section id="members" class="py-20 bg-white">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-[clamp(1.75rem,4vw,2.5rem)] font-bold text-mit-dark mb-4">Our Team</h2>
+                <h2 class="text-[clamp(1.75rem,4vw,2.5rem)] font-bold text-mit-dark mb-4" data-lang="team.title">Our Team</h2>
                 <div class="w-16 h-1 bg-mit-blue mx-auto mb-6"></div>
-                <p class="text-mit-gray max-w-3xl mx-auto text-lg">
+                <p class="text-mit-gray max-w-3xl mx-auto text-lg" data-lang="team.desc">
                     Our diverse team of researchers, engineers, designers, and students brings a wide range of expertise 
                     and perspectives to our work.
                 </p>
             </div>
 
             <!-- 教师成员 -->
-            <h3 class="text-2xl font-semibold text-mit-dark mb-8 border-b border-gray-200 pb-2">Faculty & Researchers</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-                <!-- 成员1 - 可点击展开详情 -->
-                <div class="member-card-hover bg-white border border-gray-200 rounded-sm overflow-hidden shadow-sm">
-                    <div class="member-card cursor-pointer p-6" data-member="member1">
-                        <div class="flex flex-col items-center text-center">
-                            <img 
-                                src="https://picsum.photos/seed/prof1/300/300" 
-                                alt="Professor Sarah Johnson" 
-                                class="w-32 h-32 rounded-full object-cover mb-4 border-4 border-mit-blue/20"
-                            >
-                            <h4 class="text-xl font-bold text-mit-dark mb-1">Sarah Johnson</h4>
-                            <p class="text-mit-blue font-medium mb-3">Professor & Group Lead</p>
-                            <p class="text-mit-gray text-sm mb-4">Computational Design | MIT EECS</p>
-                            <button class="text-mit-blue hover:text-mit-dark transition-colors flex items-center">
-                                View Profile <i class="fas fa-chevron-down ml-2"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <!-- 成员1详情（默认隐藏） -->
-                    <div id="member1" class="member-details hidden px-6 pb-6 border-t border-gray-100">
-                        <div class="mt-4">
-                            <h5 class="font-semibold text-lg mb-3">About</h5>
-                            <p class="text-mit-gray mb-4 text-sm leading-relaxed">
-                                Dr. Johnson is a Professor of Electrical Engineering and Computer Science at MIT. 
-                                Her research focuses on developing computational tools for design and fabrication, with applications 
-                                in architecture, product design, and sustainable manufacturing. She received her PhD from Stanford University 
-                                and has published over 100 peer-reviewed papers in top journals and conferences.
-                            </p>
-                            
-                            <h5 class="font-semibold text-lg mb-3">Research Interests</h5>
-                            <ul class="text-mit-gray text-sm mb-4 space-y-1">
-                                <li>• Computational design optimization</li>
-                                <li>• Generative design algorithms</li>
-                                <li>• Digital fabrication workflows</li>
-                                <li>• Sustainable material systems</li>
-                            </ul>
-                            
-                            <h5 class="font-semibold text-lg mb-3">Publications</h5>
-                            <ul class="text-mit-gray text-sm space-y-2">
-                                <li>
-                                    <a href="#" class="flex items-center text-mit-blue hover:underline">
-                                        <i class="fas fa-file-pdf-o mr-2"></i>
-                                        Computational Design for Additive Manufacturing (2023)
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="flex items-center text-mit-blue hover:underline">
-                                        <i class="fas fa-file-pdf-o mr-2"></i>
-                                        Generative Algorithms for Sustainable Architecture (2022)
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="flex items-center text-mit-blue hover:underline">
-                                        <i class="fas fa-file-pdf-o mr-2"></i>
-                                        Human-in-the-Loop Design Systems (2021)
-                                    </a>
-                                </li>
-                            </ul>
-                            
-                            <div class="mt-4 flex space-x-3 text-mit-gray">
-                                <a href="mailto:sarah.johnson@mit.edu" class="hover:text-mit-blue transition-colors">
-                                    <i class="fas fa-envelope"></i>
-                                </a>
-                                <a href="#" class="hover:text-mit-blue transition-colors">
-                                    <i class="fas fa-globe"></i>
-                                </a>
-                                <a href="#" class="hover:text-mit-blue transition-colors">
-                                    <i class="fab fa-google-scholar"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 成员2 -->
-                <div class="member-card-hover bg-white border border-gray-200 rounded-sm overflow-hidden shadow-sm">
-                    <div class="member-card cursor-pointer p-6" data-member="member2">
-                        <div class="flex flex-col items-center text-center">
-                            <img 
-                                src="https://picsum.photos/seed/prof2/300/300" 
-                                alt="Dr. Michael Chen" 
-                                class="w-32 h-32 rounded-full object-cover mb-4 border-4 border-mit-blue/20"
-                            >
-                            <h4 class="text-xl font-bold text-mit-dark mb-1">Michael Chen</h4>
-                            <p class="text-mit-blue font-medium mb-3">Senior Research Scientist</p>
-                            <p class="text-mit-gray text-sm mb-4">Robotics & Fabrication | MIT CSAIL</p>
-                            <button class="text-mit-blue hover:text-mit-dark transition-colors flex items-center">
-                                View Profile <i class="fas fa-chevron-down ml-2"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <!-- 成员2详情 -->
-                    <div id="member2" class="member-details hidden px-6 pb-6 border-t border-gray-100">
-                        <div class="mt-4">
-                            <h5 class="font-semibold text-lg mb-3">About</h5>
-                            <p class="text-mit-gray mb-4 text-sm leading-relaxed">
-                                Dr. Chen is a Senior Research Scientist at the MIT Computer Science and Artificial Intelligence Laboratory (CSAIL). 
-                                His work focuses on the development of robotic fabrication systems and human-robot collaboration in design and manufacturing. 
-                                He has extensive experience in developing custom hardware and software solutions for digital fabrication processes.
-                            </p>
-                            
-                            <h5 class="font-semibold text-lg mb-3">Research Interests</h5>
-                            <ul class="text-mit-gray text-sm mb-4 space-y-1">
-                                <li>• Robotic fabrication</li>
-                                <li>• Human-robot interaction</li>
-                                <li>• Adaptive manufacturing</li>
-                                <li>• Sensor integration</li>
-                            </ul>
-                            
-                            <h5 class="font-semibold text-lg mb-3">Publications</h5>
-                            <ul class="text-mit-gray text-sm space-y-2">
-                                <li>
-                                    <a href="#" class="flex items-center text-mit-blue hover:underline">
-                                        <i class="fas fa-file-pdf-o mr-2"></i>
-                                        Collaborative Robotic Fabrication (2023)
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="flex items-center text-mit-blue hover:underline">
-                                        <i class="fas fa-file-pdf-o mr-2"></i>
-                                        Adaptive Control for Additive Manufacturing (2022)
-                                    </a>
-                                </li>
-                            </ul>
-                            
-                            <div class="mt-4 flex space-x-3 text-mit-gray">
-                                <a href="mailto:michael.chen@mit.edu" class="hover:text-mit-blue transition-colors">
-                                    <i class="fas fa-envelope"></i>
-                                </a>
-                                <a href="#" class="hover:text-mit-blue transition-colors">
-                                    <i class="fas fa-globe"></i>
-                                </a>
-                                <a href="#" class="hover:text-mit-blue transition-colors">
-                                    <i class="fab fa-google-scholar"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 成员3 -->
-                <div class="member-card-hover bg-white border border-gray-200 rounded-sm overflow-hidden shadow-sm">
-                    <div class="member-card cursor-pointer p-6" data-member="member3">
-                        <div class="flex flex-col items-center text-center">
-                            <img 
-                                src="https://picsum.photos/seed/prof3/300/300" 
-                                alt="Dr. Emily Rodriguez" 
-                                class="w-32 h-32 rounded-full object-cover mb-4 border-4 border-mit-blue/20"
-                            >
-                            <h4 class="text-xl font-bold text-mit-dark mb-1">Emily Rodriguez</h4>
-                            <p class="text-mit-blue font-medium mb-3">Research Scientist</p>
-                            <p class="text-mit-gray text-sm mb-4">AI & Design | MIT Media Lab</p>
-                            <button class="text-mit-blue hover:text-mit-dark transition-colors flex items-center">
-                                View Profile <i class="fas fa-chevron-down ml-2"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <!-- 成员3详情 -->
-                    <div id="member3" class="member-details hidden px-6 pb-6 border-t border-gray-100">
-                        <div class="mt-4">
-                            <h5 class="font-semibold text-lg mb-3">About</h5>
-                            <p class="text-mit-gray mb-4 text-sm leading-relaxed">
-                                Dr. Rodriguez is a Research Scientist at the MIT Media Lab, where she develops AI-powered design tools 
-                                that augment human creativity. Her research combines machine learning, human-computer interaction, and 
-                                design theory to create more intuitive and inclusive design systems.
-                            </p>
-                            
-                            <h5 class="font-semibold text-lg mb-3">Research Interests</h5>
-                            <ul class="text-mit-gray text-sm mb-4 space-y-1">
-                                <li>• AI-assisted design</li>
-                                <li>• Creative machine learning</li>
-                                <li>• Human-AI collaboration</li>
-                                <li>• Inclusive design tools</li>
-                            </ul>
-                            
-                            <h5 class="font-semibold text-lg mb-3">Publications</h5>
-                            <ul class="text-mit-gray text-sm space-y-2">
-                                <li>
-                                    <a href="#" class="flex items-center text-mit-blue hover:underline">
-                                        <i class="fas fa-file-pdf-o mr-2"></i>
-                                        AI for Creative Design (2023)
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="flex items-center text-mit-blue hover:underline">
-                                        <i class="fas fa-file-pdf-o mr-2"></i>
-                                        Human-Centered AI in Design (2022)
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="flex items-center text-mit-blue hover:underline">
-                                        <i class="fas fa-file-pdf-o mr-2"></i>
-                                        Explainable AI for Designers (2021)
-                                    </a>
-                                </li>
-                            </ul>
-                            
-                            <div class="mt-4 flex space-x-3 text-mit-gray">
-                                <a href="mailto:emily.rodriguez@mit.edu" class="hover:text-mit-blue transition-colors">
-                                    <i class="fas fa-envelope"></i>
-                                </a>
-                                <a href="#" class="hover:text-mit-blue transition-colors">
-                                    <i class="fas fa-globe"></i>
-                                </a>
-                                <a href="#" class="hover:text-mit-blue transition-colors">
-                                    <i class="fab fa-google-scholar"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <h3 class="text-2xl font-semibold text-mit-dark mb-8 border-b border-gray-200 pb-2" data-lang="team.faculty">Faculty & Researchers</h3>
+            <div id="facultyContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                <!-- 教师成员由JS动态生成 -->
             </div>
 
             <!-- 学生成员 -->
-            <h3 class="text-2xl font-semibold text-mit-dark mb-8 border-b border-gray-200 pb-2">Students & Researchers</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- 学生1 -->
-                <div class="member-card-hover bg-white border border-gray-200 rounded-sm overflow-hidden shadow-sm">
-                    <div class="member-card cursor-pointer p-5" data-member="student1">
-                        <div class="flex flex-col items-center text-center">
-                            <img 
-                                src="https://picsum.photos/seed/student1/300/300" 
-                                alt="Alex Thompson" 
-                                class="w-24 h-24 rounded-full object-cover mb-3 border-3 border-mit-blue/20"
-                            >
-                            <h4 class="text-lg font-bold text-mit-dark mb-1">Alex Thompson</h4>
-                            <p class="text-mit-blue text-sm font-medium mb-2">PhD Student</p>
-                            <p class="text-mit-gray text-xs mb-3">Computational Design</p>
-                            <button class="text-mit-blue hover:text-mit-dark transition-colors text-sm flex items-center">
-                                View Profile <i class="fas fa-chevron-down ml-1"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <!-- 学生1详情 -->
-                    <div id="student1" class="member-details hidden px-5 pb-5 border-t border-gray-100">
-                        <div class="mt-3">
-                            <p class="text-mit-gray text-xs mb-3 leading-relaxed">
-                                Alex's PhD research focuses on developing optimization algorithms for sustainable building design. 
-                                He holds a Master's degree in Computational Design from MIT and a Bachelor's degree in Architecture from Harvard University.
-                            </p>
-                            <h5 class="font-semibold text-sm mb-2">Publications</h5>
-                            <ul class="text-mit-gray text-xs space-y-1">
-                                <li>
-                                    <a href="#" class="flex items-center text-mit-blue hover:underline">
-                                        <i class="fas fa-file-pdf-o mr-1 text-xs"></i>
-                                        Sustainable Design Optimization (2023)
-                                    </a>
-                                </li>
-                            </ul>
-                            <div class="mt-3 flex space-x-2 text-mit-gray text-sm">
-                                <a href="#" class="hover:text-mit-blue transition-colors"><i class="fab fa-github"></i></a>
-                                <a href="#" class="hover:text-mit-blue transition-colors"><i class="fas fa-envelope"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 学生2 -->
-                <div class="member-card-hover bg-white border border-gray-200 rounded-sm overflow-hidden shadow-sm">
-                    <div class="member-card cursor-pointer p-5" data-member="student2">
-                        <div class="flex flex-col items-center text-center">
-                            <img 
-                                src="https://picsum.photos/seed/student2/300/300" 
-                                alt="Lisa Wang" 
-                                class="w-24 h-24 rounded-full object-cover mb-3 border-3 border-mit-blue/20"
-                            >
-                            <h4 class="text-lg font-bold text-mit-dark mb-1">Lisa Wang</h4>
-                            <p class="text-mit-blue text-sm font-medium mb-2">Master's Student</p>
-                            <p class="text-mit-gray text-xs mb-3">Robotics</p>
-                            <button class="text-mit-blue hover:text-mit-dark transition-colors text-sm flex items-center">
-                                View Profile <i class="fas fa-chevron-down ml-1"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <!-- 学生2详情 -->
-                    <div id="student2" class="member-details hidden px-5 pb-5 border-t border-gray-100">
-                        <div class="mt-3">
-                            <p class="text-mit-gray text-xs mb-3 leading-relaxed">
-                                Lisa's research focuses on robotic assembly systems for modular construction. She has a background in 
-                                mechanical engineering and has interned at Boston Dynamics and Autodesk.
-                            </p>
-                            <h5 class="font-semibold text-sm mb-2">Publications</h5>
-                            <ul class="text-mit-gray text-xs space-y-1">
-                                <li>
-                                    <a href="#" class="flex items-center text-mit-blue hover:underline">
-                                        <i class="fas fa-file-pdf-o mr-1 text-xs"></i>
-                                        Robotic Assembly for Modular Buildings (2023)
-                                    </a>
-                                </li>
-                            </ul>
-                            <div class="mt-3 flex space-x-2 text-mit-gray text-sm">
-                                <a href="#" class="hover:text-mit-blue transition-colors"><i class="fab fa-github"></i></a>
-                                <a href="#" class="hover:text-mit-blue transition-colors"><i class="fas fa-envelope"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 学生3 -->
-                <div class="member-card-hover bg-white border border-gray-200 rounded-sm overflow-hidden shadow-sm">
-                    <div class="member-card cursor-pointer p-5" data-member="student3">
-                        <div class="flex flex-col items-center text-center">
-                            <img 
-                                src="https://picsum.photos/seed/student3/300/300" 
-                                alt="Carlos Mendez" 
-                                class="w-24 h-24 rounded-full object-cover mb-3 border-3 border-mit-blue/20"
-                            >
-                            <h4 class="text-lg font-bold text-mit-dark mb-1">Carlos Mendez</h4>
-                            <p class="text-mit-blue text-sm font-medium mb-2">Undergraduate Researcher</p>
-                            <p class="text-mit-gray text-xs mb-3">Computer Science</p>
-                            <button class="text-mit-blue hover:text-mit-dark transition-colors text-sm flex items-center">
-                                View Profile <i class="fas fa-chevron-down ml-1"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <!-- 学生3详情 -->
-                    <div id="student3" class="member-details hidden px-5 pb-5 border-t border-gray-100">
-                        <div class="mt-3">
-                            <p class="text-mit-gray text-xs mb-3 leading-relaxed">
-                                Carlos is an undergraduate researcher working on machine learning models for generative design. 
-                                He is a junior in Computer Science with a minor in Design.
-                            </p>
-                            <h5 class="font-semibold text-sm mb-2">Projects</h5>
-                            <ul class="text-mit-gray text-xs space-y-1">
-                                <li>• Generative Design Tool for Furniture (2023)</li>
-                            </ul>
-                            <div class="mt-3 flex space-x-2 text-mit-gray text-sm">
-                                <a href="#" class="hover:text-mit-blue transition-colors"><i class="fab fa-github"></i></a>
-                                <a href="#" class="hover:text-mit-blue transition-colors"><i class="fas fa-envelope"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 学生4 -->
-                <div class="member-card-hover bg-white border border-gray-200 rounded-sm overflow-hidden shadow-sm">
-                    <div class="member-card cursor-pointer p-5" data-member="student4">
-                        <div class="flex flex-col items-center text-center">
-                            <img 
-                                src="https://picsum.photos/seed/student4/300/300" 
-                                alt="Yuki Tanaka" 
-                                class="w-24 h-24 rounded-full object-cover mb-3 border-3 border-mit-blue/20"
-                            >
-                            <h4 class="text-lg font-bold text-mit-dark mb-1">Yuki Tanaka</h4>
-                            <p class="text-mit-blue text-sm font-medium mb-2">Postdoctoral Fellow</p>
-                            <p class="text-mit-gray text-xs mb-3">Human-Computer Interaction</p>
-                            <button class="text-mit-blue hover:text-mit-dark transition-colors text-sm flex items-center">
-                                View Profile <i class="fas fa-chevron-down ml-1"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <!-- 学生4详情 -->
-                    <div id="student4" class="member-details hidden px-5 pb-5 border-t border-gray-100">
-                        <div class="mt-3">
-                            <p class="text-mit-gray text-xs mb-3 leading-relaxed">
-                                Yuki's postdoctoral research explores cultural differences in design tool usage and 
-                                develops inclusive design interfaces for global users. She received her PhD from the University of Tokyo.
-                            </p>
-                            <h5 class="font-semibold text-sm mb-2">Publications</h5>
-                            <ul class="text-mit-gray text-xs space-y-1">
-                                <li>
-                                    <a href="#" class="flex items-center text-mit-blue hover:underline">
-                                        <i class="fas fa-file-pdf-o mr-1 text-xs"></i>
-                                        Cross-Cultural Design Interfaces (2023)
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="flex items-center text-mit-blue hover:underline">
-                                        <i class="fas fa-file-pdf-o mr-1 text-xs"></i>
-                                        Inclusive Design Tools (2022)
-                                    </a>
-                                </li>
-                            </ul>
-                            <div class="mt-3 flex space-x-2 text-mit-gray text-sm">
-                                <a href="#" class="hover:text-mit-blue transition-colors"><i class="fab fa-github"></i></a>
-                                <a href="#" class="hover:text-mit-blue transition-colors"><i class="fas fa-envelope"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <h3 class="text-2xl font-semibold text-mit-dark mb-8 border-b border-gray-200 pb-2" data-lang="team.students">Students & Researchers</h3>
+            <div id="studentContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- 学生成员由JS动态生成 -->
             </div>
         </div>
     </section>
@@ -557,22 +203,22 @@
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div>
-                    <h3 class="text-xl font-bold mb-4">CDFG @ MIT</h3>
-                    <p class="text-gray-400 text-sm">
+                    <h3 class="text-xl font-bold mb-4" data-lang="footer.title">CDFG @ MIT</h3>
+                    <p class="text-gray-400 text-sm" data-lang="footer.address">
                         Computational Design & Fabrication Group<br>
                         Massachusetts Institute of Technology<br>
                         Cambridge, MA 02139, USA
                     </p>
                 </div>
                 <div>
-                    <h3 class="text-xl font-bold mb-4">Contact</h3>
+                    <h3 class="text-xl font-bold mb-4" data-lang="footer.contact">Contact</h3>
                     <ul class="space-y-2 text-gray-400 text-sm">
                         <li class="flex items-center gap-2"><i class="fas fa-phone"></i> +1 (617) 253-1234</li>
                         <li class="flex items-center gap-2"><i class="fas fa-envelope"></i> cdfg@mit.edu</li>
                     </ul>
                 </div>
                 <div>
-                    <h3 class="text-xl font-bold mb-4">Connect</h3>
+                    <h3 class="text-xl font-bold mb-4" data-lang="footer.connect">Connect</h3>
                     <div class="flex space-x-4 text-xl">
                         <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-twitter"></i></a>
                         <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-github"></i></a>
@@ -582,68 +228,572 @@
                 </div>
             </div>
             <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400 text-sm">
-                <p>&copy; 2024 Massachusetts Institute of Technology. All rights reserved.</p>
+                <p data-lang="footer.copyright">&copy; 2024 Massachusetts Institute of Technology. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <!-- JavaScript -->
     <script>
-        // 移动端菜单切换
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-        
-        // 成员卡片点击展开/收起详情
-        document.querySelectorAll('.member-card').forEach(card => {
-            card.addEventListener('click', () => {
-                const memberId = card.getAttribute('data-member');
-                const detailElement = document.getElementById(memberId);
-                
-                // 收起其他所有详情
-                document.querySelectorAll('.member-details').forEach(detail => {
-                    if (detail.id !== memberId) {
-                        detail.classList.add('hidden');
+        // ======================== 1. 语言配置数据 ========================
+        const langData = {
+            // 英文
+            en: {
+                nav: {
+                    title: "CDFG Research Group",
+                    about: "About",
+                    members: "Members",
+                    research: "Research",
+                    publications: "Publications"
+                },
+                lang: {
+                    zh: "中文",
+                    en: "English"
+                },
+                banner: {
+                    title: "Computational Design & Fabrication Group",
+                    desc: "We advance the state of the art in computational design, digital fabrication, and human-computer interaction, with a focus on creating tools that empower designers, engineers, and makers to create better, more sustainable products and environments.",
+                    btn: "Meet Our Team <i class='fas fa-arrow-right ml-2'></i>"
+                },
+                mission: {
+                    title: "Our Mission",
+                    desc1: "The CDFG is a multidisciplinary research group at MIT dedicated to exploring the intersection of computer science, design, and manufacturing. Our work spans from fundamental algorithms to real-world applications, with the goal of making digital design and fabrication more accessible, efficient, and creative.",
+                    desc2: "We collaborate with industry partners, academic institutions, and community organizations to translate our research into practical solutions that address pressing societal challenges."
+                },
+                research: {
+                    focus: "Research Focus Areas",
+                    area1: "Computational Design & Optimization",
+                    area2: "Digital Fabrication & Robotics",
+                    area3: "Sustainable Design & Manufacturing",
+                    area4: "Human-Computer Interaction",
+                    area5: "AI-Assisted Design Tools"
+                },
+                team: {
+                    title: "Our Team",
+                    desc: "Our diverse team of researchers, engineers, designers, and students brings a wide range of expertise and perspectives to our work.",
+                    faculty: "Faculty & Researchers",
+                    students: "Students & Researchers"
+                },
+                footer: {
+                    title: "CDFG @ MIT",
+                    address: "Computational Design & Fabrication Group<br>Massachusetts Institute of Technology<br>Cambridge, MA 02139, USA",
+                    contact: "Contact",
+                    connect: "Connect",
+                    copyright: "&copy; 2024 Massachusetts Institute of Technology. All rights reserved."
+                }
+            },
+            // 中文
+            zh: {
+                nav: {
+                    title: "计算设计与制造研究组",
+                    about: "关于我们",
+                    members: "团队成员",
+                    research: "研究方向",
+                    publications: "研究成果"
+                },
+                lang: {
+                    zh: "中文",
+                    en: "English"
+                },
+                banner: {
+                    title: "计算设计与制造研究组",
+                    desc: "我们致力于推动计算设计、数字制造和人机交互领域的技术发展，专注于打造赋能设计师、工程师和制造者的工具，以创造更优质、更可持续的产品和环境。",
+                    btn: "认识我们的团队 <i class='fas fa-arrow-right ml-2'></i>"
+                },
+                mission: {
+                    title: "我们的使命",
+                    desc1: "CDFG是麻省理工学院的一个跨学科研究团队，致力于探索计算机科学、设计和制造的交叉领域。我们的工作涵盖从基础算法到实际应用的各个层面，旨在使数字设计和制造更加普及、高效和富有创意。",
+                    desc2: "我们与行业合作伙伴、学术机构和社区组织合作，将研究成果转化为切实可行的解决方案，以应对紧迫的社会挑战。"
+                },
+                research: {
+                    focus: "研究重点领域",
+                    area1: "计算设计与优化",
+                    area2: "数字制造与机器人技术",
+                    area3: "可持续设计与制造",
+                    area4: "人机交互",
+                    area5: "人工智能辅助设计工具"
+                },
+                team: {
+                    title: "我们的团队",
+                    desc: "我们多元化的研究团队由研究员、工程师、设计师和学生组成，为我们的工作带来了广泛的专业知识和视角。",
+                    faculty: "教师与研究员",
+                    students: "学生与研究人员"
+                },
+                footer: {
+                    title: "CDFG @ 麻省理工学院",
+                    address: "计算设计与制造研究组<br>麻省理工学院<br>剑桥市，马萨诸塞州 02139，美国",
+                    contact: "联系方式",
+                    connect: "关注我们",
+                    copyright: "&copy; 2024 麻省理工学院。保留所有权利。"
+                }
+            }
+        };
+
+        // ======================== 2. 成员数据配置（重点：增删改都在这里操作） ========================
+        const memberData = {
+            // 教师成员
+            faculty: [
+                {
+                    id: "member1",
+                    name: { en: "Sarah Johnson", zh: "萨拉·约翰逊" },
+                    position: { en: "Professor & Group Lead", zh: "教授 & 研究组负责人" },
+                    department: { en: "Computational Design | MIT EECS", zh: "计算设计 | 麻省理工学院电子工程与计算机科学系" },
+                    avatar: "https://picsum.photos/seed/prof1/300/300",
+                    about: {
+                        en: "Dr. Johnson is a Professor of Electrical Engineering and Computer Science at MIT. Her research focuses on developing computational tools for design and fabrication, with applications in architecture, product design, and sustainable manufacturing. She received her PhD from Stanford University and has published over 100 peer-reviewed papers in top journals and conferences.",
+                        zh: "约翰逊博士是麻省理工学院电子工程与计算机科学系教授。她的研究重点是开发用于设计和制造的计算工具，应用于建筑、产品设计和可持续制造领域。她拥有斯坦福大学博士学位，并在顶级期刊和会议上发表了100多篇同行评审论文。"
+                    },
+                    interests: {
+                        en: ["Computational design optimization", "Generative design algorithms", "Digital fabrication workflows", "Sustainable material systems"],
+                        zh: ["计算设计优化", "生成式设计算法", "数字制造工作流", "可持续材料系统"]
+                    },
+                    publications: [
+                        { title: { en: "Computational Design for Additive Manufacturing (2023)", zh: "增材制造的计算设计 (2023)" }, link: "#" },
+                        { title: { en: "Generative Algorithms for Sustainable Architecture (2022)", zh: "可持续建筑的生成算法 (2022)" }, link: "#" },
+                        { title: { en: "Human-in-the-Loop Design Systems (2021)", zh: "人在环中的设计系统 (2021)" }, link: "#" }
+                    ],
+                    contact: {
+                        email: "sarah.johnson@mit.edu",
+                        website: "#",
+                        scholar: "#"
                     }
+                },
+                {
+                    id: "member2",
+                    name: { en: "Michael Chen", zh: "迈克尔·陈" },
+                    position: { en: "Senior Research Scientist", zh: "高级研究科学家" },
+                    department: { en: "Robotics & Fabrication | MIT CSAIL", zh: "机器人与制造 | 麻省理工学院计算机科学与人工智能实验室" },
+                    avatar: "https://picsum.photos/seed/prof2/300/300",
+                    about: {
+                        en: "Dr. Chen is a Senior Research Scientist at the MIT Computer Science and Artificial Intelligence Laboratory (CSAIL). His work focuses on the development of robotic fabrication systems and human-robot collaboration in design and manufacturing. He has extensive experience in developing custom hardware and software solutions for digital fabrication processes.",
+                        zh: "陈博士是麻省理工学院计算机科学与人工智能实验室（CSAIL）的高级研究科学家。他的工作重点是开发机器人制造系统以及设计和制造中的人机协作。他在为数字制造流程开发定制硬件和软件解决方案方面拥有丰富经验。"
+                    },
+                    interests: {
+                        en: ["Robotic fabrication", "Human-robot interaction", "Adaptive manufacturing", "Sensor integration"],
+                        zh: ["机器人制造", "人机交互", "自适应制造", "传感器集成"]
+                    },
+                    publications: [
+                        { title: { en: "Collaborative Robotic Fabrication (2023)", zh: "协作机器人制造 (2023)" }, link: "#" },
+                        { title: { en: "Adaptive Control for Additive Manufacturing (2022)", zh: "增材制造的自适应控制 (2022)" }, link: "#" }
+                    ],
+                    contact: {
+                        email: "michael.chen@mit.edu",
+                        website: "#",
+                        scholar: "#"
+                    }
+                },
+                {
+                    id: "member3",
+                    name: { en: "Emily Rodriguez", zh: "艾米丽·罗德里格斯" },
+                    position: { en: "Research Scientist", zh: "研究科学家" },
+                    department: { en: "AI & Design | MIT Media Lab", zh: "人工智能与设计 | 麻省理工学院媒体实验室" },
+                    avatar: "https://picsum.photos/seed/prof3/300/300",
+                    about: {
+                        en: "Dr. Rodriguez is a Research Scientist at the MIT Media Lab, where she develops AI-powered design tools that augment human creativity. Her research combines machine learning, human-computer interaction, and design theory to create more intuitive and inclusive design systems.",
+                        zh: "罗德里格斯博士是麻省理工学院媒体实验室的研究科学家，她开发增强人类创造力的人工智能设计工具。她的研究结合了机器学习、人机交互和设计理论，以创建更直观和包容的设计系统。"
+                    },
+                    interests: {
+                        en: ["AI-assisted design", "Creative machine learning", "Human-AI collaboration", "Inclusive design tools"],
+                        zh: ["人工智能辅助设计", "创意机器学习", "人机协作", "包容性设计工具"]
+                    },
+                    publications: [
+                        { title: { en: "AI for Creative Design (2023)", zh: "创意设计的人工智能 (2023)" }, link: "#" },
+                        { title: { en: "Human-Centered AI in Design (2022)", zh: "设计中以人为中心的人工智能 (2022)" }, link: "#" },
+                        { title: { en: "Explainable AI for Designers (2021)", zh: "面向设计师的可解释人工智能 (2021)" }, link: "#" }
+                    ],
+                    contact: {
+                        email: "emily.rodriguez@mit.edu",
+                        website: "#",
+                        scholar: "#"
+                    }
+                }
+                // 新增教师：直接复制上面的对象，修改内容即可
+            ],
+            // 学生成员
+            students: [
+                {
+                    id: "student1",
+                    name: { en: "Alex Thompson", zh: "亚历克斯·汤普森" },
+                    position: { en: "PhD Student", zh: "博士生" },
+                    department: { en: "Computational Design", zh: "计算设计" },
+                    avatar: "https://picsum.photos/seed/student1/300/300",
+                    about: {
+                        en: "Alex's PhD research focuses on developing optimization algorithms for sustainable building design. He holds a Master's degree in Computational Design from MIT and a Bachelor's degree in Architecture from Harvard University.",
+                        zh: "亚历克斯的博士研究重点是开发可持续建筑设计的优化算法。他拥有麻省理工学院计算设计硕士学位和哈佛大学建筑学学士学位。"
+                    },
+                    publications: [
+                        { title: { en: "Sustainable Design Optimization (2023)", zh: "可持续设计优化 (2023)" }, link: "#" }
+                    ],
+                    projects: [],
+                    contact: {
+                        github: "#",
+                        email: "#"
+                    }
+                },
+                {
+                    id: "student2",
+                    name: { en: "Lisa Wang", zh: "王丽莎" },
+                    position: { en: "Master's Student", zh: "硕士生" },
+                    department: { en: "Robotics", zh: "机器人技术" },
+                    avatar: "https://picsum.photos/seed/student2/300/300",
+                    about: {
+                        en: "Lisa's research focuses on robotic assembly systems for modular construction. She has a background in mechanical engineering and has interned at Boston Dynamics and Autodesk.",
+                        zh: "丽莎的研究重点是模块化建筑的机器人装配系统。她拥有机械工程背景，并曾在波士顿动力和欧特克实习。"
+                    },
+                    publications: [
+                        { title: { en: "Robotic Assembly for Modular Buildings (2023)", zh: "模块化建筑的机器人装配 (2023)" }, link: "#" }
+                    ],
+                    projects: [],
+                    contact: {
+                        github: "#",
+                        email: "#"
+                    }
+                },
+                {
+                    id: "student3",
+                    name: { en: "Carlos Mendez", zh: "卡洛斯·门德斯" },
+                    position: { en: "Undergraduate Researcher", zh: "本科生研究员" },
+                    department: { en: "Computer Science", zh: "计算机科学" },
+                    avatar: "https://picsum.photos/seed/student3/300/300",
+                    about: {
+                        en: "Carlos is an undergraduate researcher working on machine learning models for generative design. He is a junior in Computer Science with a minor in Design.",
+                        zh: "卡洛斯是一名本科生研究员，从事生成式设计的机器学习模型研究。他是计算机科学大三学生，辅修设计。"
+                    },
+                    publications: [],
+                    projects: [
+                        { title: { en: "Generative Design Tool for Furniture (2023)", zh: "家具生成式设计工具 (2023)" } }
+                    ],
+                    contact: {
+                        github: "#",
+                        email: "#"
+                    }
+                },
+                {
+                    id: "student4",
+                    name: { en: "Yuki Tanaka", zh: "田中雪" },
+                    position: { en: "Postdoctoral Fellow", zh: "博士后研究员" },
+                    department: { en: "Human-Computer Interaction", zh: "人机交互" },
+                    avatar: "https://picsum.photos/seed/student4/300/300",
+                    about: {
+                        en: "Yuki's postdoctoral research explores cultural differences in design tool usage and develops inclusive design interfaces for global users. She received her PhD from the University of Tokyo.",
+                        zh: "田中的博士后研究探索设计工具使用的文化差异，并为全球用户开发包容性设计界面。她拥有东京大学博士学位。"
+                    },
+                    publications: [
+                        { title: { en: "Cross-Cultural Design Interfaces (2023)", zh: "跨文化设计界面 (2023)" }, link: "#" },
+                        { title: { en: "Inclusive Design Tools (2022)", zh: "包容性设计工具 (2022)" }, link: "#" }
+                    ],
+                    projects: [],
+                    contact: {
+                        github: "#",
+                        email: "#"
+                    }
+                }
+                // 新增学生：直接复制上面的对象，修改内容即可
+            ]
+        };
+
+        // ======================== 3. 核心功能实现 ========================
+        let currentLang = "zh"; // 默认语言
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 加载语言设置（优先从本地存储读取）
+            if (localStorage.getItem('preferredLang')) {
+                currentLang = localStorage.getItem('preferredLang');
+                updateLangButtons();
+            }
+            
+            // 更新页面文本
+            updatePageLanguage();
+            
+            // 渲染成员卡片
+            renderMembers();
+            
+            // 绑定事件
+            bindEvents();
+        });
+
+        // 切换语言
+        function switchLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('preferredLang', lang); // 保存到本地存储
+            updateLangButtons();
+            updatePageLanguage();
+            // 重新渲染成员卡片（更新语言）
+            renderMembers();
+        }
+
+        // 更新语言按钮样式
+        function updateLangButtons() {
+            const zhBtn = document.getElementById('langZh');
+            const enBtn = document.getElementById('langEn');
+            
+            if (currentLang === 'zh') {
+                zhBtn.classList.remove('inactive');
+                zhBtn.classList.add('active');
+                enBtn.classList.remove('active');
+                enBtn.classList.add('inactive');
+            } else {
+                zhBtn.classList.remove('active');
+                zhBtn.classList.add('inactive');
+                enBtn.classList.remove('inactive');
+                enBtn.classList.add('active');
+            }
+        }
+
+        function updatePageLanguage() {
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                const key = el.getAttribute('data-lang');
+                const keys = key.split('.');
+                let text = langData[currentLang];
+                
+                // 递归获取嵌套的语言文本
+                keys.forEach(k => {
+                    text = text[k];
                 });
                 
-                // 切换当前详情的显示状态
-                detailElement.classList.toggle('hidden');
-                
-                // 切换箭头方向
-                const arrow = card.querySelector('i');
-                if (detailElement.classList.contains('hidden')) {
-                    arrow.classList.remove('fa-chevron-up');
-                    arrow.classList.add('fa-chevron-down');
+                // 关键修复：判断是否包含HTML标签，分别处理
+                if (text && (text.includes('<i>') || text.includes('<') && text.includes('>'))) {
+                    // 包含HTML标签，使用innerHTML渲染（显示图标）
+                    el.innerHTML = text;
                 } else {
-                    arrow.classList.remove('fa-chevron-down');
-                    arrow.classList.add('fa-chevron-up');
+                    // 纯文本，使用textContent（更安全）
+                    el.textContent = text || '';
                 }
             });
-        });
-        
-        // 平滑滚动
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
+            
+            // 更新页面lang属性
+            document.documentElement.lang = currentLang === 'zh' ? 'zh-CN' : 'en';
+        }
+
+        // 渲染成员卡片
+        function renderMembers() {
+            const facultyContainer = document.getElementById('facultyContainer');
+            const studentContainer = document.getElementById('studentContainer');
+            
+            // 清空容器
+            facultyContainer.innerHTML = '';
+            studentContainer.innerHTML = '';
+            
+            // 渲染教师成员
+            memberData.faculty.forEach(member => {
+                const card = createFacultyCard(member);
+                facultyContainer.appendChild(card);
+            });
+            
+            // 渲染学生成员
+            memberData.students.forEach(member => {
+                const card = createStudentCard(member);
+                studentContainer.appendChild(card);
+            });
+        }
+
+        // 创建教师成员卡片
+        function createFacultyCard(member) {
+            const card = document.createElement('div');
+            card.className = 'member-card-hover bg-white border border-gray-200 rounded-sm overflow-hidden shadow-sm';
+            
+            // 构建卡片HTML
+            card.innerHTML = `
+                <div class="member-card cursor-pointer p-6" data-member="${member.id}">
+                    <div class="flex flex-col items-center text-center">
+                        <img 
+                            src="${member.avatar}" 
+                            alt="${member.name[currentLang]}" 
+                            class="w-32 h-32 rounded-full object-cover mb-4 border-4 border-mit-blue/20"
+                        >
+                        <h4 class="text-xl font-bold text-mit-dark mb-1">${member.name[currentLang]}</h4>
+                        <p class="text-mit-blue font-medium mb-3">${member.position[currentLang]}</p>
+                        <p class="text-mit-gray text-sm mb-4">${member.department[currentLang]}</p>
+                        <button class="text-mit-blue hover:text-mit-dark transition-colors flex items-center">
+                            ${currentLang === 'zh' ? '查看详情' : 'View Profile'} <i class="fas fa-chevron-down ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- 成员详情（默认隐藏） -->
+                <div id="${member.id}" class="member-details hidden px-6 pb-6 border-t border-gray-100">
+                    <div class="mt-4">
+                        <h5 class="font-semibold text-lg mb-3">${currentLang === 'zh' ? '关于' : 'About'}</h5>
+                        <p class="text-mit-gray mb-4 text-sm leading-relaxed">
+                            ${member.about[currentLang]}
+                        </p>
+                        
+                        <h5 class="font-semibold text-lg mb-3">${currentLang === 'zh' ? '研究方向' : 'Research Interests'}</h5>
+                        <ul class="text-mit-gray text-sm mb-4 space-y-1">
+                            ${member.interests[currentLang].map(interest => `<li>• ${interest}</li>`).join('')}
+                        </ul>
+                        
+                        ${member.publications.length > 0 ? `
+                            <h5 class="font-semibold text-lg mb-3">${currentLang === 'zh' ? '发表成果' : 'Publications'}</h5>
+                            <ul class="text-mit-gray text-sm space-y-2">
+                                ${member.publications.map(pub => `
+                                    <li>
+                                        <a href="${pub.link}" class="flex items-center text-mit-blue hover:underline">
+                                            <i class="fas fa-file-pdf-o mr-2"></i>
+                                            ${pub.title[currentLang]}
+                                        </a>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        ` : ''}
+                        
+                        <div class="mt-4 flex space-x-3 text-mit-gray">
+                            <a href="mailto:${member.contact.email}" class="hover:text-mit-blue transition-colors" title="${currentLang === 'zh' ? '邮箱' : 'Email'}">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                            <a href="${member.contact.website}" class="hover:text-mit-blue transition-colors" title="${currentLang === 'zh' ? '个人网站' : 'Website'}">
+                                <i class="fas fa-globe"></i>
+                            </a>
+                            <a href="${member.contact.scholar}" class="hover:text-mit-blue transition-colors" title="${currentLang === 'zh' ? '谷歌学术' : 'Google Scholar'}">
+                                <i class="fab fa-google-scholar"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // 创建学生成员卡片
+        function createStudentCard(member) {
+            const card = document.createElement('div');
+            card.className = 'member-card-hover bg-white border border-gray-200 rounded-sm overflow-hidden shadow-sm';
+            
+            // 构建卡片HTML
+            card.innerHTML = `
+                <div class="member-card cursor-pointer p-5" data-member="${member.id}">
+                    <div class="flex flex-col items-center text-center">
+                        <img 
+                            src="${member.avatar}" 
+                            alt="${member.name[currentLang]}" 
+                            class="w-24 h-24 rounded-full object-cover mb-3 border-3 border-mit-blue/20"
+                        >
+                        <h4 class="text-lg font-bold text-mit-dark mb-1">${member.name[currentLang]}</h4>
+                        <p class="text-mit-blue text-sm font-medium mb-2">${member.position[currentLang]}</p>
+                        <p class="text-mit-gray text-xs mb-3">${member.department[currentLang]}</p>
+                        <button class="text-mit-blue hover:text-mit-dark transition-colors text-sm flex items-center">
+                            ${currentLang === 'zh' ? '查看详情' : 'View Profile'} <i class="fas fa-chevron-down ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- 学生详情 -->
+                <div id="${member.id}" class="member-details hidden px-5 pb-5 border-t border-gray-100">
+                    <div class="mt-3">
+                        <p class="text-mit-gray text-xs mb-3 leading-relaxed">
+                            ${member.about[currentLang]}
+                        </p>
+                        
+                        ${member.publications.length > 0 ? `
+                            <h5 class="font-semibold text-sm mb-2">${currentLang === 'zh' ? '发表成果' : 'Publications'}</h5>
+                            <ul class="text-mit-gray text-xs space-y-1">
+                                ${member.publications.map(pub => `
+                                    <li>
+                                        <a href="${pub.link}" class="flex items-center text-mit-blue hover:underline">
+                                            <i class="fas fa-file-pdf-o mr-1 text-xs"></i>
+                                            ${pub.title[currentLang]}
+                                        </a>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        ` : ''}
+                        
+                        ${member.projects.length > 0 ? `
+                            <h5 class="font-semibold text-sm mb-2 mt-${member.publications.length > 0 ? '3' : '0'}">${currentLang === 'zh' ? '参与项目' : 'Projects'}</h5>
+                            <ul class="text-mit-gray text-xs space-y-1">
+                                ${member.projects.map(proj => `
+                                    <li>• ${proj.title[currentLang]}</li>
+                                `).join('')}
+                            </ul>
+                        ` : ''}
+                        
+                        <div class="mt-3 flex space-x-2 text-mit-gray text-sm">
+                            <a href="${member.contact.github}" class="hover:text-mit-blue transition-colors" title="${currentLang === 'zh' ? 'GitHub' : 'GitHub'}">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            <a href="mailto:${member.contact.email}" class="hover:text-mit-blue transition-colors" title="${currentLang === 'zh' ? '邮箱' : 'Email'}">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // 绑定所有事件
+        function bindEvents() {
+            // 移动端菜单切换
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // 语言切换按钮事件
+            document.getElementById('langZh').addEventListener('click', () => switchLanguage('zh'));
+            document.getElementById('langEn').addEventListener('click', () => switchLanguage('en'));
+            
+            // 成员卡片点击事件（使用事件委托，避免重复绑定）
+            document.addEventListener('click', function(e) {
+                const card = e.target.closest('.member-card');
+                if (card) {
+                    const memberId = card.getAttribute('data-member');
+                    const detailElement = document.getElementById(memberId);
+                    
+                    // 收起其他所有详情
+                    document.querySelectorAll('.member-details').forEach(detail => {
+                        if (detail.id !== memberId) {
+                            detail.classList.add('hidden');
+                            // 重置其他卡片的箭头
+                            const otherCard = document.querySelector(`.member-card[data-member="${detail.id}"]`);
+                            if (otherCard) {
+                                const arrow = otherCard.querySelector('i');
+                                if (arrow) {
+                                    arrow.classList.remove('fa-chevron-up');
+                                    arrow.classList.add('fa-chevron-down');
+                                }
+                            }
+                        }
                     });
                     
-                    // 关闭移动端菜单
-                    mobileMenu.classList.add('hidden');
+                    // 切换当前详情的显示状态
+                    detailElement.classList.toggle('hidden');
+                    
+                    // 切换箭头方向
+                    const arrow = card.querySelector('i');
+                    if (detailElement.classList.contains('hidden')) {
+                        arrow.classList.remove('fa-chevron-up');
+                        arrow.classList.add('fa-chevron-down');
+                    } else {
+                        arrow.classList.remove('fa-chevron-down');
+                        arrow.classList.add('fa-chevron-up');
+                    }
                 }
             });
-        });
+            
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                        
+                        // 关闭移动端菜单
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+        }
     </script>
 </body>
 </html>
