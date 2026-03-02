@@ -53,6 +53,16 @@
             .lang-btn.inactive {
                 @apply bg-white text-mit-blue border border-mit-blue;
             }
+            /* 新增：卡片详情过渡动画 */
+            .details-collapse {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease-out;
+            }
+            .details-collapse.open {
+                max-height: 1000px; /* 足够大的值容纳所有内容 */
+                transition: max-height 0.5s ease-in;
+            }
         }
 
         @media (min-width: 1024px) {
@@ -145,7 +155,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
                         <p class="text-mit-gray text-lg leading-relaxed mb-6" data-lang="mission.desc1">
-                            The CDFG is a multidisciplinary research group at MIT dedicated to exploring the intersection of 
+                            The CDFG is a multidisciplinary research group at Northwestern Polytechnical University (NPU) dedicated to exploring the intersection of 
                             computer science, design, and manufacturing. Our work spans from fundamental algorithms to real-world 
                             applications, with the goal of making digital design and fabrication more accessible, efficient, and creative.
                         </p>
@@ -197,7 +207,7 @@
             </div>
 
             <!-- 团队负责人 -->
-            <h3 class="text-2xl font-semibold text-mit-dark mb-8 border-b border-gray-200 pb-2" data-lang="team.leader">团队领军人物</h3>
+            <h3 class="text-2xl font-semibold text-mit-dark mb-8 border-b border-gray-200 pb-2" data-lang="team.leader">Team Leader</h3>
             <div id="leaderContainer" class="w-full mx-auto mb-16">
                 <!-- 领军人物由 JS 动态渲染 -->
             </div>
@@ -221,18 +231,18 @@
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div>
-                    <h3 class="text-xl font-bold mb-4" data-lang="footer.title">CDFG @ MIT</h3>
+                    <h3 class="text-xl font-bold mb-4" data-lang="footer.title">CDFG @ NPU</h3>
                     <p class="text-gray-400 text-sm" data-lang="footer.address">
                         Computational Design & Fabrication Group<br>
-                        Massachusetts Institute of Technology<br>
-                        Cambridge, MA 02139, USA
+                        Northwestern Polytechnical University<br>
+                        Xi'an, Shaanxi 710072, P.R.China
                     </p>
                 </div>
                 <div>
                     <h3 class="text-xl font-bold mb-4" data-lang="footer.contact">Contact</h3>
                     <ul class="space-y-2 text-gray-400 text-sm">
-                        <li class="flex items-center gap-2"><i class="fas fa-phone"></i> +1 (617) 253-1234</li>
-                        <li class="flex items-center gap-2"><i class="fas fa-envelope"></i> cdfg@mit.edu</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-phone"></i> +86 (29) 8849-XXXX</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-envelope"></i> cdfg@npu.edu.cn</li>
                     </ul>
                 </div>
                 <div>
@@ -246,7 +256,7 @@
                 </div>
             </div>
             <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400 text-sm">
-                <p data-lang="footer.copyright">&copy; 2024 Massachusetts Institute of Technology. All rights reserved.</p>
+                <p data-lang="footer.copyright">&copy; 2024 Northwestern Polytechnical University. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -299,6 +309,10 @@
                     contact: "Contact Us",
                     connect: "Follow Us",
                     copyright: "&copy; 2024 Institute of Industrial Artificial Intelligence, Chinese Academy of Sciences. All rights reserved."
+                },
+                card: {
+                    expand: "Expand Details",
+                    collapse: "Collapse Details"
                 }
             },
             // 中文
@@ -345,6 +359,10 @@
                     contact: "联系方式",
                     connect: "关注我们",
                     copyright: "&copy; 2024 中国科学院工业人工智能研究所。保留所有权利。"
+                },
+                card: {
+                    expand: "展开详情",
+                    collapse: "收起详情"
                 }
             }
         };
@@ -649,7 +667,7 @@
                 enBtn.classList.remove('inactive');
                 enBtn.classList.add('active');
             }
-        }
+            }
 
         function updatePageLanguage() {
             document.querySelectorAll('[data-lang]').forEach(el => {
@@ -704,22 +722,22 @@
             // 初始化+窗口大小变化时重新计算
             setGridCols();
             window.addEventListener('resize', setGridCols);
-        }
+            }
 
-        // 渲染成员卡片
-        function renderMembers() {
+            // 渲染团队成员
+            function renderMembers() {
             // 渲染领导成员
-            const leaderContainer = document.getElementById('leaderContainer');
-            leaderContainer.innerHTML = '';
-            memberData.leader.forEach(member => {
+                const leaderContainer = document.getElementById('leaderContainer');
+                leaderContainer.innerHTML = '';
+                memberData.leader.forEach(member => {
                 const card = createLeaderCard(member);
                 leaderContainer.appendChild(card);
-            });
-            
+                });
+
             // 渲染教师成员
-            const facultyContainer = document.getElementById('facultyContainer');
-            facultyContainer.innerHTML = '';
-            memberData.faculty.forEach(member => {
+                const facultyContainer = document.getElementById('facultyContainer');
+                facultyContainer.innerHTML = '';
+                memberData.faculty.forEach(member => {
                 const card = createFacultyCard(member);
                 facultyContainer.appendChild(card);
             });
@@ -752,7 +770,7 @@
                         <a href="mailto:${member.contact.email}" class="text-mit-blue"><i class="fas fa-envelope"></i></a>
                         <a href="${member.contact.website}" class="text-mit-blue"><i class="fas fa-globe"></i></a>
                         <a href="${member.contact.scholar}" class="text-mit-blue"><i class="fab fa-google-scholar"></i></a>
-                    </div>
+                            </div>
                 </div>
             `;
             return card;
@@ -778,8 +796,8 @@
                         <button class="text-mit-blue hover:text-mit-dark transition-colors flex items-center">
                             ${currentLang === 'zh' ? '查看详情' : 'View Profile'} <i class="fas fa-chevron-down ml-2"></i>
                         </button>
-                    </div>
-                </div>
+                                        </div>
+                                    </div>
                 <!-- 成员详情（默认隐藏） -->
                 <div id="${member.id}" class="member-details hidden px-6 pb-6 border-t border-gray-100">
                     <div class="mt-4">
@@ -793,19 +811,19 @@
                             ${member.interests[currentLang].map(interest => `<li>• ${interest}</li>`).join('')}
                         </ul>
                         
-                        ${member.publications.length > 0 ? `
+                                    ${member.publications.length > 0 ? `
                             <h5 class="font-semibold text-lg mb-3">${currentLang === 'zh' ? '发表成果' : 'Publications'}</h5>
                             <ul class="text-mit-gray text-sm space-y-2">
-                                ${member.publications.map(pub => `
+                                                ${member.publications.map(pub => `
                                     <li>
                                         <a href="${pub.link}" class="flex items-center text-mit-blue hover:underline">
                                             <i class="fas fa-file-pdf-o mr-2"></i>
                                             ${pub.title[currentLang]}
                                         </a>
-                                    </li>
-                                `).join('')}
-                            </ul>
-                        ` : ''}
+                                                    </li>
+                                                `).join('')}
+                                            </ul>
+                                    ` : ''}
                         
                         <div class="mt-4 flex space-x-3 text-mit-gray">
                             <a href="mailto:${member.contact.email}" class="hover:text-mit-blue transition-colors" title="${currentLang === 'zh' ? '邮箱' : 'Email'}">
@@ -816,9 +834,9 @@
                             </a>
                             <a href="${member.contact.scholar}" class="hover:text-mit-blue transition-colors" title="${currentLang === 'zh' ? '谷歌学术' : 'Google Scholar'}">
                                 <i class="fab fa-google-scholar"></i>
-                            </a>
-                        </div>
-                    </div>
+                                        </a>
+                                    </div>
+                                </div>
                 </div>
             `;
             
@@ -844,38 +862,38 @@
                         <p class="text-mit-gray text-xs mb-3">${member.department[currentLang]}</p>
                         <button class="text-mit-blue hover:text-mit-dark transition-colors text-sm flex items-center">
                             ${currentLang === 'zh' ? '查看详情' : 'View Profile'} <i class="fas fa-chevron-down ml-1"></i>
-                        </button>
-                    </div>
-                </div>
+                                </button>
+                            </div>
+                        </div>
                 <!-- 学生详情 -->
                 <div id="${member.id}" class="member-details hidden px-5 pb-5 border-t border-gray-100">
                     <div class="mt-3">
                         <p class="text-mit-gray text-xs mb-3 leading-relaxed">
                             ${member.about[currentLang]}
                         </p>
-                        
-                        ${member.publications.length > 0 ? `
+                                
+                                    ${member.publications.length > 0 ? `
                             <h5 class="font-semibold text-sm mb-2">${currentLang === 'zh' ? '发表成果' : 'Publications'}</h5>
-                            <ul class="text-mit-gray text-xs space-y-1">
-                                ${member.publications.map(pub => `
+                                            <ul class="text-mit-gray text-xs space-y-1">
+                                                ${member.publications.map(pub => `
                                     <li>
                                         <a href="${pub.link}" class="flex items-center text-mit-blue hover:underline">
                                             <i class="fas fa-file-pdf-o mr-1 text-xs"></i>
                                             ${pub.title[currentLang]}
                                         </a>
-                                    </li>
-                                `).join('')}
-                            </ul>
-                        ` : ''}
+                                                    </li>
+                                                `).join('')}
+                                            </ul>
+                                    ` : ''}
                         
-                        ${member.projects.length > 0 ? `
+                                    ${member.projects.length > 0 ? `
                             <h5 class="font-semibold text-sm mb-2 mt-${member.publications.length > 0 ? '3' : '0'}">${currentLang === 'zh' ? '参与项目' : 'Projects'}</h5>
-                            <ul class="text-mit-gray text-xs space-y-1">
-                                ${member.projects.map(proj => `
+                                            <ul class="text-mit-gray text-xs space-y-1">
+                                                ${member.projects.map(proj => `
                                     <li>• ${proj.title[currentLang]}</li>
-                                `).join('')}
-                            </ul>
-                        ` : ''}
+                                                `).join('')}
+                                            </ul>
+                                    ` : ''}
                         
                         <div class="mt-3 flex space-x-2 text-mit-gray text-sm">
                             <a href="${member.contact.github}" class="hover:text-mit-blue transition-colors" title="${currentLang === 'zh' ? 'GitHub' : 'GitHub'}">
@@ -883,25 +901,25 @@
                             </a>
                             <a href="mailto:${member.contact.email}" class="hover:text-mit-blue transition-colors" title="${currentLang === 'zh' ? '邮箱' : 'Email'}">
                                 <i class="fas fa-envelope"></i>
-                            </a>
+                                        </a>
+                                    </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            `;
+                    `;
             
             return card;
-        }
+            }
 
         // 绑定所有事件
         function bindEvents() {
             // 移动端菜单切换
             const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            const mobileMenu = document.getElementById('mobileMenu');
+                const mobileMenu = document.getElementById('mobileMenu');
             
             mobileMenuBtn.addEventListener('click', () => {
                 mobileMenu.classList.toggle('hidden');
             });
-            
+
             // 语言切换按钮事件
             document.getElementById('langZh').addEventListener('click', () => switchLanguage('zh'));
             document.getElementById('langEn').addEventListener('click', () => switchLanguage('en'));
@@ -943,7 +961,7 @@
                     }
                 }
             });
-            
+
             // 平滑滚动
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
@@ -955,10 +973,10 @@
                     if (targetElement) {
                         window.scrollTo({
                             top: targetElement.offsetTop - 80,
-                            behavior: 'smooth'
-                        });
+                        behavior: 'smooth'
+                    });
                         
-                        // 关闭移动端菜单
+                    // 关闭移动端菜单
                         mobileMenu.classList.add('hidden');
                     }
                 });
