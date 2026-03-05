@@ -63,6 +63,23 @@
                 max-height: 1000px; /* 足够大的值容纳所有内容 */
                 transition: max-height 0.5s ease-in;
             }
+
+            /*以下为卡片展开的动画函数*/
+            .details-wrapper {
+                display: grid;
+                grid-template-rows: 0fr;
+                transition: grid-template-rows 0.5s ease, opacity 0.3s ease;
+                opacity: 0;
+            }
+            /* 展开状态：高度自适应内容，透明度回正 */
+            .details-wrapper.open {
+                grid-template-rows: 1fr;
+                opacity: 1;
+            }
+            /* 内部容器必须设置不可见，防止高度为0时文字溢出 */
+            .details-inner {
+                overflow: hidden;
+            }
         }
 
         @media (min-width: 1024px) {
@@ -424,138 +441,141 @@
         }
 
         // 创建教师成员卡片
+        // 成员零件 1：渲染研究方向列表
+        function renderInterests(interests, lang) {
+            if (!interests || interests.length === 0) return '';
+            const title = lang === 'zh' ? '研究方向' : 'Research Interests';
+            return `
+                <div>
+                    <h5 class="font-semibold text-mit-dark mb-1 text-sm">${title}</h5>
+                    <ul class="text-mit-gray text-xs space-y-1">
+                        ${interests.map(it => `<li>• ${it}</li>`).join('')}
+                    </ul>
+                </div>`;
+        }
+
+        // 成员零件 2：渲染论文/出版物列表
+        function renderPublications(publications, lang) {
+            if (!publications || publications.length === 0) return '';
+            const title = lang === 'zh' ? '发表成果' : 'Publications';
+            return `
+                <div>
+                    <h5 class="font-semibold text-mit-dark mb-1 text-sm">${title}</h5>
+                    <ul class="text-mit-gray text-xs space-y-2">
+                        ${publications.map(pub => `
+                            <li>
+                                <a href="${pub.link}" class="inline-flex items-center text-mit-blue hover:underline">
+                                    <i class="fas fa-file-pdf mr-2"></i> ${pub.title[lang]}
+                                </a>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>`;
+        }
+
+        // 成员零件 3：专门负责生成“项目列表”字符串
+        function renderProjects(projects, lang) {
+            if (!projects || projects.length === 0) return '';
+            const title = lang === 'zh' ? '参与项目' : 'Projects';
+            
+            // 将复杂的数组操作抽离
+            const listItems = projects.map(p => `<li>• ${p.title[lang]}</li>`).join('');
+            
+            return `
+                <div>
+                    <h5 class="font-semibold text-mit-dark mb-1 text-sm">${title}</h5>
+                    <ul class="text-mit-gray space-y-1">${listItems}</ul>
+                </div>`;
+        }
+
+        // 成员零件 4：渲染底部社交按钮
+        function renderSocialIcons(contact) {
+            return `
+                <div class="pt-2 flex gap-4 text-mit-gray text-lg">
+                    <a href="mailto:${contact.email}" class="hover:text-mit-blue" title="Email"><i class="fas fa-envelope"></i></a>
+                    <a href="${contact.website}" class="hover:text-mit-blue" title="Website"><i class="fas fa-globe"></i></a>
+                    <a href="${contact.scholar}" class="hover:text-mit-blue" title="Scholar"><i class="fab fa-google-scholar"></i></a>
+                </div>`;
+        }
+        
+        // 教师成员主函数：现在它只负责卡片的大框架
         function createFacultyCard(member) {
             const card = document.createElement('div');
             card.className = 'member-card-hover bg-white border border-gray-200 rounded-sm overflow-hidden shadow-sm';
             
-            // 构建卡片HTML
+            // 使用零件函数组装 HTML
             card.innerHTML = `
                 <div class="member-card cursor-pointer p-6" data-member="${member.id}">
                     <div class="flex flex-col items-center text-center">
-                        <img 
-                            src="${member.avatar}" 
-                            alt="${member.name[currentLang]}" 
-                            class="w-32 h-32 rounded-full object-cover mb-4 border-4 border-mit-blue/20"
-                        >
+                        <img src="${member.avatar}" alt="${member.name[currentLang]}" 
+                            class="w-32 h-32 rounded-full object-cover mb-4 border-4 border-mit-blue/20">
                         <h4 class="text-xl font-bold text-mit-dark mb-1">${member.name[currentLang]}</h4>
-                        <p class="text-mit-blue font-medium mb-3">${member.position[currentLang]}</p>
-                        <p class="text-mit-gray text-sm mb-4">${member.department[currentLang]}</p>
-                        <button class="text-mit-blue hover:text-mit-dark transition-colors flex items-center">
-                            ${currentLang === 'zh' ? '查看详情' : 'View Profile'} <i class="fas fa-chevron-down ml-2"></i>
+                        <p class="text-mit-blue font-medium mb-3 text-sm">${member.position[currentLang]}</p>
+                        <p class="text-mit-gray text-xs mb-4 px-4">${member.department[currentLang]}</p>
+                        <button class="text-mit-blue hover:text-mit-dark transition-colors flex items-center text-xs font-semibold">
+                            ${currentLang === 'zh' ? '查看详情' : 'View Profile'} 
+                            <i class="fas fa-chevron-down ml-2 transition-transform duration-300"></i>
                         </button>
-                                        </div>
-                                    </div>
-                <!-- 成员详情（默认隐藏） -->
-                <div id="${member.id}" class="member-details hidden px-6 pb-6 border-t border-gray-100">
-                    <div class="mt-4">
-                        <h5 class="font-semibold text-lg mb-3">${currentLang === 'zh' ? '关于' : 'About'}</h5>
-                        <p class="text-mit-gray mb-4 text-sm leading-relaxed">
-                            ${member.about[currentLang]}
-                        </p>
-                        
-                        <h5 class="font-semibold text-lg mb-3">${currentLang === 'zh' ? '研究方向' : 'Research Interests'}</h5>
-                        <ul class="text-mit-gray text-sm mb-4 space-y-1">
-                            ${member.interests[currentLang].map(interest => `<li>• ${interest}</li>`).join('')}
-                        </ul>
-                        
-                                    ${member.publications.length > 0 ? `
-                            <h5 class="font-semibold text-lg mb-3">${currentLang === 'zh' ? '发表成果' : 'Publications'}</h5>
-                            <ul class="text-mit-gray text-sm space-y-2">
-                                                ${member.publications.map(pub => `
-                                    <li>
-                                        <a href="${pub.link}" class="flex items-center text-mit-blue hover:underline">
-                                            <i class="fas fa-file-pdf-o mr-2"></i>
-                                            ${pub.title[currentLang]}
-                                        </a>
-                                                    </li>
-                                                `).join('')}
-                                            </ul>
-                                    ` : ''}
-                        
-                        <div class="mt-4 flex space-x-3 text-mit-gray">
-                            <a href="mailto:${member.contact.email}" class="hover:text-mit-blue transition-colors" title="${currentLang === 'zh' ? '邮箱' : 'Email'}">
-                                <i class="fas fa-envelope"></i>
-                            </a>
-                            <a href="${member.contact.website}" class="hover:text-mit-blue transition-colors" title="${currentLang === 'zh' ? '个人网站' : 'Website'}">
-                                <i class="fas fa-globe"></i>
-                            </a>
-                            <a href="${member.contact.scholar}" class="hover:text-mit-blue transition-colors" title="${currentLang === 'zh' ? '谷歌学术' : 'Google Scholar'}">
-                                <i class="fab fa-google-scholar"></i>
-                                        </a>
-                                    </div>
-                                </div>
+                    </div>
+                </div>
+
+                <div id="wrapper-${member.id}" class="details-wrapper border-t border-gray-100 bg-gray-50/30">
+                    <div class="details-inner">
+                        <div class="px-6 pb-6 pt-4 space-y-5">
+                            <div>
+                                <h5 class="font-semibold text-mit-dark mb-1 text-sm">${currentLang === 'zh' ? '关于' : 'About'}</h5>
+                                <p class="text-mit-gray text-xs leading-relaxed">${member.about[currentLang]}</p>
+                            </div>
+                            ${renderInterests(member.interests[currentLang], currentLang)}
+                            ${renderPublications(member.publications, currentLang)}
+                            ${renderSocialIcons(member.contact)}
+                        </div>
+                    </div>
                 </div>
             `;
-            
             return card;
         }
 
-        // 创建学生成员卡片
+        // 学生成员主函数：现在它只负责卡片的大框架
         function createStudentCard(member) {
             const card = document.createElement('div');
             card.className = 'member-card-hover bg-white border border-gray-200 rounded-sm overflow-hidden shadow-sm';
             
-            // 构建卡片HTML
+            // 使用抽离出的辅助函数，HTML 字符串瞬间短了一大截
             card.innerHTML = `
                 <div class="member-card cursor-pointer p-5" data-member="${member.id}">
                     <div class="flex flex-col items-center text-center">
-                        <img 
-                            src="${member.avatar}" 
-                            alt="${member.name[currentLang]}" 
-                            class="w-24 h-24 rounded-full object-cover mb-3 border-3 border-mit-blue/20"
-                        >
+                        <img src="${member.avatar}" class="w-24 h-24 rounded-full object-cover mb-3 border-3 border-mit-blue/20">
                         <h4 class="text-lg font-bold text-mit-dark mb-1">${member.name[currentLang]}</h4>
                         <p class="text-mit-blue text-sm font-medium mb-2">${member.position[currentLang]}</p>
-                        <p class="text-mit-gray text-xs mb-3">${member.department[currentLang]}</p>
-                        <button class="text-mit-blue hover:text-mit-dark transition-colors text-sm flex items-center">
-                            ${currentLang === 'zh' ? '查看详情' : 'View Profile'} <i class="fas fa-chevron-down ml-1"></i>
-                                </button>
+                        <p class="text-mit-gray text-xs mb-4 px-4">${member.department[currentLang]}</p>
+                        <button class="text-mit-blue hover:text-mit-dark transition-colors text-xs flex items-center">
+                            ${currentLang === 'zh' ? '查看详情' : 'View Profile'} 
+                            <i class="fas fa-chevron-down ml-1 transition-transform duration-300"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="wrapper-${member.id}" class="details-wrapper border-t border-gray-100 bg-gray-50/30">
+                    <div class="details-inner">
+                        <div class="px-5 pb-5 pt-3 space-y-3 text-xs">
+                            <div>
+                                <h5 class="font-semibold text-mit-dark mb-1 text-sm">${currentLang === 'zh' ? '关于' : 'About'}</h5>
+                                <p class="text-mit-gray text-xs leading-relaxed">${member.about[currentLang]}</p>
+                            </div>
+                            ${renderPublications(member.publications, currentLang)}
+                            ${renderProjects(member.projects, currentLang)}
+
+                            <div class="flex gap-3 text-mit-gray text-base">
+                                <a href="${member.contact.github}" class="hover:text-mit-blue"><i class="fab fa-github"></i></a>
+                                <a href="mailto:${member.contact.email}" class="hover:text-mit-blue"><i class="fas fa-envelope"></i></a>
                             </div>
                         </div>
-                <!-- 学生详情 -->
-                <div id="${member.id}" class="member-details hidden px-5 pb-5 border-t border-gray-100">
-                    <div class="mt-3">
-                        <p class="text-mit-gray text-xs mb-3 leading-relaxed">
-                            ${member.about[currentLang]}
-                        </p>
-                                
-                                    ${member.publications.length > 0 ? `
-                            <h5 class="font-semibold text-sm mb-2">${currentLang === 'zh' ? '发表成果' : 'Publications'}</h5>
-                                            <ul class="text-mit-gray text-xs space-y-1">
-                                                ${member.publications.map(pub => `
-                                    <li>
-                                        <a href="${pub.link}" class="flex items-center text-mit-blue hover:underline">
-                                            <i class="fas fa-file-pdf-o mr-1 text-xs"></i>
-                                            ${pub.title[currentLang]}
-                                        </a>
-                                                    </li>
-                                                `).join('')}
-                                            </ul>
-                                    ` : ''}
-                        
-                                    ${member.projects.length > 0 ? `
-                            <h5 class="font-semibold text-sm mb-2 mt-${member.publications.length > 0 ? '3' : '0'}">${currentLang === 'zh' ? '参与项目' : 'Projects'}</h5>
-                                            <ul class="text-mit-gray text-xs space-y-1">
-                                                ${member.projects.map(proj => `
-                                    <li>• ${proj.title[currentLang]}</li>
-                                                `).join('')}
-                                            </ul>
-                                    ` : ''}
-                        
-                        <div class="mt-3 flex space-x-2 text-mit-gray text-sm">
-                            <a href="${member.contact.github}" class="hover:text-mit-blue transition-colors" title="${currentLang === 'zh' ? 'GitHub' : 'GitHub'}">
-                                <i class="fab fa-github"></i>
-                            </a>
-                            <a href="mailto:${member.contact.email}" class="hover:text-mit-blue transition-colors" title="${currentLang === 'zh' ? '邮箱' : 'Email'}">
-                                <i class="fas fa-envelope"></i>
-                                        </a>
-                                    </div>
-                            </div>
-                        </div>
-                    `;
-            
+                    </div>
+                </div>
+            `;
             return card;
-            }
+        }
 
         // 绑定所有事件
         function bindEvents() {
@@ -574,39 +594,24 @@
             // 成员卡片点击事件（使用事件委托，避免重复绑定）
             document.addEventListener('click', function(e) {
                 const card = e.target.closest('.member-card');
-                if (card) {
+                    if (!card) return;
+
                     const memberId = card.getAttribute('data-member');
-                    const detailElement = document.getElementById(memberId);
-                    
-                    // 收起其他所有详情
-                    document.querySelectorAll('.member-details').forEach(detail => {
-                        if (detail.id !== memberId) {
-                            detail.classList.add('hidden');
-                            // 重置其他卡片的箭头
-                            const otherCard = document.querySelector(`.member-card[data-member="${detail.id}"]`);
-                            if (otherCard) {
-                                const arrow = otherCard.querySelector('i');
-                                if (arrow) {
-                                    arrow.classList.remove('fa-chevron-up');
-                                    arrow.classList.add('fa-chevron-down');
-                                }
-                            }
-                        }
-                    });
-                    
-                    // 切换当前详情的显示状态
-                    detailElement.classList.toggle('hidden');
-                    
-                    // 切换箭头方向
-                    const arrow = card.querySelector('i');
-                    if (detailElement.classList.contains('hidden')) {
-                        arrow.classList.remove('fa-chevron-up');
-                        arrow.classList.add('fa-chevron-down');
-                    } else {
-                        arrow.classList.remove('fa-chevron-down');
-                        arrow.classList.add('fa-chevron-up');
+                    const wrapper = document.getElementById(`wrapper-${memberId}`);
+                    const arrow = card.querySelector('i.fa-chevron-down');
+
+                    // 检查是否已经打开
+                    const isOpen = wrapper.classList.contains('open');
+
+                    // (可选) 自动关闭其他打开的卡片，让页面更整洁
+                    document.querySelectorAll('.details-wrapper.open').forEach(el => el.classList.remove('open'));
+                    document.querySelectorAll('.fa-chevron-down.rotate-180').forEach(el => el.classList.remove('rotate-180'));
+
+                    // 切换当前卡片
+                    if (!isOpen) {
+                        wrapper.classList.add('open');
+                        if (arrow) arrow.classList.add('rotate-180');
                     }
-                }
             });
 
             // 平滑滚动
