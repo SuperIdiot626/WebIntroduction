@@ -501,8 +501,9 @@ window.memberData = {
             ],
             projects: [],
             contact: {
-                github: "#",
-                email: "wangyizhuang@npu.edu.cn"
+                github: "https://github.com/SuperIdiot626",
+                email: "wangyizhuang@npu.edu.cn",
+                website: "https://www.baidu.com"
             }
         },
         {
