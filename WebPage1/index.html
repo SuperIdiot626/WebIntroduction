@@ -432,9 +432,9 @@
                     <p class="text-mit-gray leading-relaxed mb-4">${member.about[currentLang]}</p>
                     <div class="flex gap-3 justify-center md:justify-start">
                         <a href="mailto:${member.contact.email}" class="text-mit-blue"><i class="fas fa-envelope"></i></a>
-                        <a href="${member.contact.website}" class="text-mit-blue"><i class="fas fa-globe"></i></a>
-                        <a href="${member.contact.scholar}" class="text-mit-blue"><i class="fab fa-google-scholar"></i></a>
-                            </div>
+                        <a href="${member.contact.website}" target="_blank" rel="noopener noreferrer" class="text-mit-blue"><i class="fas fa-globe"></i></a>
+                        <a href="${member.contact.scholar}" target="_blank" rel="noopener noreferrer" class="text-mit-blue"><i class="fab fa-google-scholar"></i></a>
+                    </div>
                 </div>
             `;
             return card;
@@ -462,13 +462,28 @@
                 <div>
                     <h5 class="font-semibold text-mit-dark mb-1 text-sm">${title}</h5>
                     <ul class="text-mit-gray text-xs space-y-2">
-                        ${publications.map(pub => `
-                            <li>
-                                <a href="${pub.link}" class="inline-flex items-center text-mit-blue hover:underline">
-                                    <i class="fas fa-file-pdf mr-2"></i> ${pub.title[lang]}
-                                </a>
-                            </li>
-                        `).join('')}
+                        ${publications.map(pub => {
+                            // 数据合法性校验
+                            const isValidLink = pub.link && pub.link !== '#';
+                            
+                            // 动态生成属性：有效链接则赋予下载能力，无效则禁用点击
+                            const linkAttrs = isValidLink 
+                                ? `href="${pub.link}" download target="_blank" rel="noopener noreferrer"` 
+                                : `href="javascript:void(0)" title="${lang === 'zh' ? '文件暂未上传' : 'File not available'}"`;
+                                
+                            // 动态生成样式：无效链接显示置灰效果
+                            const stateClass = isValidLink
+                                ? "text-mit-blue hover:underline cursor-pointer"
+                                : "text-gray-400 cursor-not-allowed opacity-70";
+
+                            return `
+                                <li>
+                                    <a ${linkAttrs} class="inline-flex items-center transition-colors ${stateClass}">
+                                        <i class="fas fa-file-pdf mr-2"></i> ${pub.title[lang]}
+                                    </a>
+                                </li>
+                            `;
+                        }).join('')}
                     </ul>
                 </div>`;
         }
@@ -493,8 +508,8 @@
             return `
                 <div class="pt-2 flex gap-4 text-mit-gray text-lg">
                     <a href="mailto:${contact.email}" class="hover:text-mit-blue" title="Email"><i class="fas fa-envelope"></i></a>
-                    <a href="${contact.website}" class="hover:text-mit-blue" title="Website"><i class="fas fa-globe"></i></a>
-                    <a href="${contact.scholar}" class="hover:text-mit-blue" title="Scholar"><i class="fab fa-google-scholar"></i></a>
+                    <a href="${contact.website}" target="_blank" rel="noopener noreferrer" class="hover:text-mit-blue" title="Website"><i class="fas fa-globe"></i></a>
+                    <a href="${contact.scholar}" target="_blank" rel="noopener noreferrer" class="hover:text-mit-blue" title="Scholar"><i class="fab fa-google-scholar"></i></a>
                 </div>`;
         }
         
@@ -567,7 +582,7 @@
                             ${renderProjects(member.projects, currentLang)}
 
                             <div class="flex gap-3 text-mit-gray text-base">
-                                <a href="${member.contact.github}" class="hover:text-mit-blue"><i class="fab fa-github"></i></a>
+                                <a href="${member.contact.github}" target="_blank" rel="noopener noreferrer" class="hover:text-mit-blue"><i class="fab fa-github"></i></a>
                                 <a href="mailto:${member.contact.email}" class="hover:text-mit-blue"><i class="fas fa-envelope"></i></a>
                             </div>
                         </div>
