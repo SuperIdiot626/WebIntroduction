@@ -579,6 +579,9 @@
 
         // 绑定所有事件
         function bindEvents() {
+            const CONFIG = {
+                autoCollapse: true // true: 打开一个关闭其他 (手风琴模式)；false: 可同时打开多个
+            };
             // 移动端菜单切换
             const mobileMenuBtn = document.getElementById('mobileMenuBtn');
                 const mobileMenu = document.getElementById('mobileMenu');
@@ -594,24 +597,36 @@
             // 成员卡片点击事件（使用事件委托，避免重复绑定）
             document.addEventListener('click', function(e) {
                 const card = e.target.closest('.member-card');
-                    if (!card) return;
+                if (!card) return;
 
-                    const memberId = card.getAttribute('data-member');
-                    const wrapper = document.getElementById(`wrapper-${memberId}`);
-                    const arrow = card.querySelector('i.fa-chevron-down');
+                const memberId = card.getAttribute('data-member');
+                const wrapper = document.getElementById(`wrapper-${memberId}`);
+                const arrow = card.querySelector('i.fa-chevron-down');
 
-                    // 检查是否已经打开
-                    const isOpen = wrapper.classList.contains('open');
-
-                    // (可选) 自动关闭其他打开的卡片，让页面更整洁
-                    document.querySelectorAll('.details-wrapper.open').forEach(el => el.classList.remove('open'));
-                    document.querySelectorAll('.fa-chevron-down.rotate-180').forEach(el => el.classList.remove('rotate-180'));
-
-                    // 切换当前卡片
-                    if (!isOpen) {
-                        wrapper.classList.add('open');
-                        if (arrow) arrow.classList.add('rotate-180');
+                // 1. 读取当前卡片的开闭状态
+                const isOpen = wrapper.classList.contains('open');
+                if (!isOpen) {  // ===== 状态变迁：从 收起 -> 展开 =====
+                    // 展开前检查：如果开启了自动收起，则清理其他已打开的卡片
+                    if (CONFIG.autoCollapse) {
+                        // 找出所有当前处于打开状态的 wrapper 和旋转的 arrow
+                        document.querySelectorAll('.details-wrapper.open').forEach(el => {
+                            // 严谨起见，排除当前正在点击的元素（虽然 isOpen 已经拦截，但双重保险更好）
+                            if (el !== wrapper) el.classList.remove('open');
+                        });
+                        document.querySelectorAll('.fa-chevron-down.rotate-180').forEach(el => {
+                            if (el !== arrow) el.classList.remove('rotate-180');
+                        });
                     }
+                    // 正式执行当前卡片的展开动作
+                    wrapper.classList.add('open');
+                    if (arrow) arrow.classList.add('rotate-180');
+                    
+                } 
+                else {          // ===== 状态变迁：从 展开 -> 收起 =====
+                    // 正式执行当前卡片的收起动作
+                    wrapper.classList.remove('open');
+                    if (arrow) arrow.classList.remove('rotate-180');
+                }
             });
 
             // 平滑滚动
