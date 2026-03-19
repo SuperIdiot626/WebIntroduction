@@ -137,8 +137,8 @@ window.memberData = {
                 zh: ["计算设计", "人工智能 + 制造"]
             },
             contact: {
-                email: "zhangweiwei@npu.edu.cn",
-                website: "#",
+                email: "aeroelastic@nwpu.edu.cn",
+                website: "https://jszy.nwpu.edu.cn/7w1gn672804dz7xr79v1429868736830.html",
                 scholar: "#"
             }
         }
@@ -171,9 +171,9 @@ window.memberData = {
             },
             publications: [
                 { title: {
-                    en: "Computational Design for Additive Manufacturing (2023)",
-                    zh: "增材制造的计算设计 (2023)" },
-                    link: "#"
+                    en: "Test For PDF Download Function",
+                    zh: "pdf文档下载功能测试" },
+                    link: "info/faculties/SongShufang/test.pdf"
                 },
                 { title: {
                     en: "Generative Algorithms for Sustainable Aerospace Design (2022)",
@@ -305,10 +305,20 @@ window.memberData = {
             },
             publications: [
                 { title: {
-                    en: "Sustainable Design Optimization for Aerospace Facilities (2023)",
-                    zh: "航空航天设施的可持续设计优化 (2023)" },
+                    en: "Test For PDF Download Function",
+                    zh: "pdf文档下载功能测试" },
+                    link: "info/students/YeZhiqiu/test.pdf"
+                },
+                { title: {
+                    en: "Error Test For PDF Download Function",
+                    zh: "不存在的pdf文档下载功能测试1" },
+                    link: "info/students/YeZhiqiu/a.pdf"
+                },
+                { title: {
+                    en: "Error Test For PDF Download Function",
+                    zh: "不存在的pdf文档下载功能测试2" },
                     link: "#"
-                }
+                },
             ],
             projects: [
                 { title: {
